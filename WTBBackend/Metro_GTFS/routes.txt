@@ -1,0 +1,10 @@
+route_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+2,"2","Riverton","",3,,55DDCC,000000
+3,"3","North Deering - Stevens Avenue","",3,,EEAA00,000000
+4,"5","Maine Mall","",3,,22CC44,FFFFFF
+5,"6","North Deering - Washington Avenue","",3,,9999FF,FFFFFF
+1,"1","Congress Street","",3,,2299FF,FFFFFF
+7,"8","Peninsula Loop","",3,,EE44FF,FFFFFF
+6,"7","Falmouth Flyer","",3,,FF0022,FFFFFF
+8,"4","Westbrook","",3,,88FF11,000000
+9,"1/5","1 Congress Street / 5 Maine Mall - Limited Sunday Service","",3,,2299FF,FFFFFF

@@ -1,0 +1,2 @@
+agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone
+59,South Portland Bus Service,http://www.southportland.org/index.asp?Type=B_BASIC&SEC={5B00AA02-CFA6-43A4-9CA3-6E0A11F4B7C3},America/New_York,en,207.767.5556

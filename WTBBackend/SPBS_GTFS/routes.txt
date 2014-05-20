@@ -1,0 +1,4 @@
+route_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+1,"21","Willard Square","",3,,009999,FFFFFF
+3,"24A","Maine Mall via Main Street","",3,,CC3300,FFFFFF
+2,"24B","Maine Mall via Community Center","",3,,FF9933,FFFFFF

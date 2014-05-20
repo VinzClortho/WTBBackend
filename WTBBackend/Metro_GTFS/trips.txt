@@ -1,0 +1,405 @@
+route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id
+2,1,360,"Prides Corner / Metro Pulse",,,1
+2,1,361,"Prides Corner / Metro Pulse",,,20
+2,1,362,"Prides Corner / Metro Pulse",,,21
+2,1,363,"Prides Corner / Metro Pulse",,,22
+2,1,364,"Prides Corner / Metro Pulse",,,23
+2,1,365,"Prides Corner / Metro Pulse",,,24
+2,1,366,"Prides Corner / Metro Pulse",,,25
+2,1,367,"Prides Corner / Metro Pulse",,,26
+2,1,368,"Prides Corner / Metro Pulse",,,27
+2,1,369,"Prides Corner / Metro Pulse",,,28
+2,1,370,"Prides Corner / Metro Pulse",,,29
+2,1,371,"Prides Corner / Metro Pulse",,,30
+2,1,372,"Prides Corner / Metro Pulse",,,31
+2,1,373,"Prides Corner / Metro Pulse",,,32
+2,1,374,"Prides Corner / Metro Pulse",,,33
+2,1,375,"Prides Corner / Metro Pulse",,,34
+2,1,376,"Prides Corner / Metro Pulse",,,35
+2,1,377,"Prides Corner / Metro Pulse",,,36
+2,1,378,"Prides Corner / Metro Pulse",,,37
+2,1,379,"Prides Corner / Metro Pulse",,,38
+2,1,380,"Prides Corner / Metro Pulse",,,39
+2,1,381,"Prides Corner / Metro Pulse",,,2
+2,1,382,"Prides Corner / Metro Pulse",,,3
+2,1,383,"Prides Corner / Metro Pulse",,,4
+2,1,384,"Prides Corner / Metro Pulse",,,5
+2,1,385,"Prides Corner / Metro Pulse",,,6
+2,1,386,"Prides Corner / Metro Pulse",,,7
+2,1,387,"Prides Corner / Metro Pulse",,,8
+2,1,388,"Prides Corner / Metro Pulse",,,9
+2,1,389,"Prides Corner / Metro Pulse",,,10
+2,1,390,"Prides Corner / Metro Pulse",,,11
+2,1,391,"Prides Corner / Metro Pulse",,,12
+2,1,392,"Prides Corner / Metro Pulse",,,13
+2,1,393,"Prides Corner / Metro Pulse",,,14
+2,1,394,"Prides Corner / Metro Pulse",,,15
+2,1,395,"Prides Corner / Metro Pulse",,,16
+2,1,396,"Prides Corner / Metro Pulse",,,17
+2,1,397,"Prides Corner / Metro Pulse",,,18
+2,1,398,"Prides Corner / Metro Pulse",,,19
+2,1,399,"Prides Corner / Metro Pulse",,,40
+3,1,424,"North Deering / Metro Pulse",,,41
+3,1,425,"North Deering / Metro Pulse",,,44
+3,1,426,"North Deering / Metro Pulse",,,45
+3,1,427,"North Deering / Metro Pulse",,,46
+3,1,428,"North Deering / Metro Pulse",,,47
+3,1,429,"North Deering / Metro Pulse",,,48
+3,1,430,"North Deering / Metro Pulse",,,49
+3,1,431,"North Deering / Metro Pulse",,,50
+3,1,432,"North Deering / Metro Pulse",,,51
+3,1,433,"North Deering / Metro Pulse",,,52
+3,1,434,"North Deering / Metro Pulse",,,53
+3,1,435,"North Deering / Metro Pulse",,,54
+3,1,436,"North Deering / Metro Pulse",,,55
+3,1,437,"North Deering / Metro Pulse",,,56
+3,1,438,"North Deering / Metro Pulse",,,57
+3,1,439,"North Deering / Metro Pulse",,,58
+3,1,440,"North Deering / Metro Pulse",,,59
+3,1,441,"North Deering / Metro Pulse",,,60
+3,1,442,"North Deering / Metro Pulse",,,61
+3,1,443,"North Deering / Metro Pulse",,,62
+3,1,444,"North Deering / Metro Pulse",,,63
+3,1,445,"North Deering / Metro Pulse",,,42
+3,1,446,"North Deering / Metro Pulse",,,43
+4,1,463,"Maine Mall via PTC / Metro Pulse",,,64
+4,1,464,"Maine Mall via PTC / Metro Pulse",,,65
+4,1,465,"Maine Mall via PTC / Metro Pulse",,,66
+4,1,466,"Maine Mall via PTC / Metro Pulse",,,67
+4,1,467,"Maine Mall via PTC / Metro Pulse",,,68
+4,1,468,"Maine Mall via PTC / Metro Pulse",,,69
+4,1,469,"Maine Mall via PTC / Metro Pulse",,,70
+4,1,470,"Maine Mall via PTC / Metro Pulse",,,71
+4,1,471,"Maine Mall via PTC / Metro Pulse",,,72
+4,1,472,"Maine Mall via PTC / Metro Pulse",,,73
+4,1,473,"Maine Mall via PTC / Metro Pulse",,,74
+4,1,474,"Maine Mall via PTC / Metro Pulse",,,75
+4,1,475,"Maine Mall via PTC / Metro Pulse",,,76
+4,1,476,"Maine Mall via PTC / Metro Pulse",,,77
+4,1,477,"Maine Mall via PTC / Metro Pulse",,,78
+4,1,478,"Maine Mall via PTC / Metro Pulse",,,79
+4,1,479,"Maine Mall via PTC / Metro Pulse",,,80
+4,1,480,"Maine Mall via PTC / Metro Pulse",,,81
+4,1,481,"Maine Mall via PTC / Metro Pulse",,,82
+4,1,482,"Maine Mall via PTC / Metro Pulse",,,83
+4,1,483,"Maine Mall via PTC / Metro Pulse",,,84
+4,1,484,"Maine Mall via PTC / Metro Pulse",,,85
+4,1,485,"Maine Mall via PTC / Metro Pulse",,,86
+4,1,486,"Maine Mall via PTC / Metro Pulse",,,87
+4,1,487,"Maine Mall via PTC / Metro Pulse",,,88
+4,1,488,"Maine Mall via PTC / Metro Pulse",,,89
+4,1,489,"Maine Mall via PTC / Metro Pulse",,,90
+4,1,491,"Maine Mall via PTC / Metro Pulse",,,92
+4,1,492,"Maine Mall via PTC / Metro Pulse",,,93
+5,1,494,"Falmouth Crossing / Metro Pulse",,,94
+5,1,495,"Falmouth Crossing / Metro Pulse",,,95
+5,1,496,"Falmouth Crossing / Metro Pulse",,,96
+5,1,497,"Falmouth Crossing / Metro Pulse",,,97
+5,1,498,"Falmouth Crossing / Metro Pulse",,,98
+5,1,499,"Falmouth Crossing / Metro Pulse",,,99
+5,1,500,"Washington and Lambert St. / Metro Pulse",,,100
+5,1,501,"Falmouth Crossing / Metro Pulse",,,101
+5,1,502,"Washington and Lambert St. / Metro Pulse",,,102
+5,1,503,"Falmouth Crossing / Metro Pulse",,,103
+5,1,504,"Falmouth Crossing / Metro Pulse",,,104
+5,1,505,"Falmouth Crossing / Metro Pulse",,,105
+5,1,506,"Washington and Lambert St. / Metro Pulse",,,106
+5,1,507,"Falmouth Crossing / Metro Pulse",,,107
+5,1,508,"Falmouth Crossing / Metro Pulse",,,108
+5,1,509,"Falmouth Crossing / Metro Pulse",,,109
+5,1,510,"Washington and Lambert St. / Metro Pulse",,,110
+5,1,511,"Falmouth Crossing / Metro Pulse",,,111
+5,1,512,"Falmouth Crossing / Metro Pulse",,,112
+5,1,513,"Falmouth Crossing / Metro Pulse",,,113
+5,1,514,"Falmouth Crossing / Metro Pulse",,,114
+5,1,515,"Falmouth Crossing / Metro Pulse",,,115
+5,1,516,"Falmouth Crossing / Metro Pulse",,,116
+5,1,517,"Falmouth Crossing / Metro Pulse",,,117
+5,2,521,"Washington and Lambert St. / Metro Pulse",,,118
+5,2,522,"Washington and Lambert St. / Metro Pulse",,,119
+5,2,523,"Washington and Lambert St. / Metro Pulse",,,120
+5,2,524,"Washington and Lambert St. / Metro Pulse",,,121
+5,2,525,"Washington and Lambert St. / Metro Pulse",,,122
+5,2,526,"Washington and Lambert St. / Metro Pulse",,,123
+5,2,527,"Washington and Lambert St. / Metro Pulse",,,124
+5,2,528,"Washington and Lambert St. / Metro Pulse",,,125
+5,2,529,"Washington and Lambert St. / Metro Pulse",,,126
+5,2,530,"Washington and Lambert St. / Metro Pulse",,,127
+5,2,531,"Washington and Lambert St. / Metro Pulse",,,128
+5,2,532,"Washington and Lambert St. / Metro Pulse",,,129
+5,2,542,"Washington and Lambert St. / Metro Pulse",,,130
+5,2,543,"Washington and Lambert St. / Metro Pulse",,,131
+5,2,544,"Washington and Lambert St. / Metro Pulse",,,132
+1,1,546,"Munjoy Hill / St. John St.",,,133
+1,1,547,"Munjoy Hill / St. John St.",,,134
+1,1,548,"Munjoy Hill / St. John St./Mercy at the Fore",,,135
+1,1,549,"Munjoy Hill / St. John St.",,,136
+1,1,550,"Munjoy Hill / St. John St./Mercy at the Fore",,,137
+1,1,551,"Munjoy Hill / St. John St.",,,138
+1,1,552,"Munjoy Hill / St. John St./Mercy at the Fore",,,139
+1,1,553,"Munjoy Hill / St. John St.",,,140
+1,1,554,"Munjoy Hill / St. John St./Mercy at the Fore",,,141
+1,1,555,"Munjoy Hill / St. John St.",,,142
+1,1,556,"Munjoy Hill / St. John St./Mercy at the Fore",,,143
+1,1,557,"Munjoy Hill / St. John St.",,,144
+1,1,558,"Munjoy Hill / St. John St./Mercy at the Fore",,,145
+1,1,559,"Munjoy Hill / St. John St.",,,146
+1,1,560,"Munjoy Hill / St. John St./Mercy at the Fore",,,147
+1,1,561,"Munjoy Hill / St. John St.",,,148
+1,1,562,"Munjoy Hill / St. John St./Mercy at the Fore",,,149
+1,1,563,"Munjoy Hill / St. John St.",,,152
+1,1,564,"Munjoy Hill / St. John St./Mercy at the Fore",,,153
+1,1,565,"Munjoy Hill / St. John St.",,,154
+1,1,566,"Munjoy Hill / St. John St./Mercy at the Fore",,,155
+1,1,567,"Munjoy Hill / St. John St.",,,156
+1,1,568,"Munjoy Hill / St. John St./Mercy at the Fore",,,157
+1,1,569,"Munjoy Hill / St. John St.",,,158
+1,1,570,"Munjoy Hill / St. John St.",,,159
+1,1,571,"Munjoy Hill / St. John St.",,,160
+1,1,572,"Munjoy Hill / St. John St.",,,161
+1,1,573,"Munjoy Hill / St. John St.",,,162
+1,1,574,"Munjoy Hill / St. John St.",,,164
+1,1,577,"Munjoy Hill / St. John St.",,,150
+1,1,578,"Munjoy Hill / St. John St./Mercy at the Fore",,,151
+1,2,579,"Munjoy Hill / St. John St.",,,167
+1,2,580,"Munjoy Hill / St. John St.",,,168
+1,2,581,"Munjoy Hill / St. John St.",,,169
+1,2,582,"Munjoy Hill / St. John St.",,,170
+1,2,583,"Munjoy Hill / St. John St.",,,171
+1,2,584,"Munjoy Hill / St. John St.",,,172
+1,2,585,"Munjoy Hill / St. John St.",,,173
+1,2,586,"Munjoy Hill / St. John St.",,,174
+1,2,587,"Munjoy Hill / St. John St.",,,175
+1,2,588,"Munjoy Hill / St. John St.",,,176
+1,2,589,"Munjoy Hill / St. John St.",,,177
+1,2,590,"Munjoy Hill / St. John St.",,,178
+1,2,591,"Munjoy Hill / St. John St.",,,179
+1,2,592,"Munjoy Hill / St. John St.",,,180
+1,2,593,"Munjoy Hill / St. John St.",,,181
+1,2,594,"Munjoy Hill / St. John St.",,,182
+1,2,595,"Munjoy Hill / St. John St.",,,183
+1,2,596,"Munjoy Hill / St. John St.",,,184
+1,2,597,"Munjoy Hill / St. John St.",,,185
+1,2,598,"Munjoy Hill / St. John St.",,,186
+1,2,599,"Munjoy Hill / St. John St.",,,187
+1,2,600,"Munjoy Hill / St. John St.",,,188
+1,2,601,"Munjoy Hill / St. John St.",,,189
+1,2,602,"Munjoy Hill / St. John St.",,,190
+1,2,603,"Munjoy Hill / St. John St.",,,191
+1,2,604,"Munjoy Hill / St. John St.",,,192
+1,2,605,"Munjoy Hill / St. John St.",,,193
+1,2,606,"Munjoy Hill / St. John St.",,,194
+1,2,607,"Munjoy Hill / St. John St.",,,195
+1,2,608,"Munjoy Hill / St. John St.",,,196
+1,2,609,"Munjoy Hill / St. John St.",,,197
+1,2,610,"Munjoy Hill / St. John St.",,,198
+1,2,611,"Munjoy Hill / St. John St.",,,199
+1,2,612,"Munjoy Hill / St. John St.",,,201
+2,2,613,"Prides Corner / Metro Pulse",,,204
+2,2,614,"Prides Corner / Metro Pulse",,,205
+2,2,615,"Prides Corner / Metro Pulse",,,206
+2,2,616,"Prides Corner / Metro Pulse",,,207
+2,2,617,"Prides Corner / Metro Pulse",,,208
+2,2,618,"Prides Corner / Metro Pulse",,,209
+2,2,619,"Prides Corner / Metro Pulse",,,210
+2,2,620,"Prides Corner / Metro Pulse",,,211
+2,2,621,"Prides Corner / Metro Pulse",,,212
+2,2,622,"Prides Corner / Metro Pulse",,,213
+2,2,623,"Prides Corner / Metro Pulse",,,214
+2,2,624,"Prides Corner / Metro Pulse",,,215
+2,2,625,"Prides Corner / Metro Pulse",,,216
+7,1,653,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,217
+7,1,654,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,218
+7,1,655,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,219
+7,1,656,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,220
+7,1,657,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,221
+7,1,658,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,222
+7,1,659,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,223
+7,1,660,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,224
+7,1,661,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,225
+7,1,662,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,226
+7,1,663,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,227
+7,1,664,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,228
+7,1,665,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,229
+7,1,666,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,230
+7,1,667,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,231
+7,1,668,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,232
+7,1,669,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,233
+7,1,670,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,234
+7,1,671,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,235
+7,1,672,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,236
+7,1,673,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,237
+7,1,674,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,238
+7,1,675,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,239
+7,1,676,"Marginal Way / Hannaford / Casco Bay Ferry Terminal",,,240
+7,2,692,"Hannaford / Casco Bay Ferry Terminal",,,241
+7,2,693,"Hannaford / Casco Bay Ferry Terminal",,,242
+7,2,695,"Hannaford / Casco Bay Ferry Terminal",,,243
+7,2,696,"Hannaford / Casco Bay Ferry Terminal",,,244
+7,2,703,"Hannaford / Casco Bay Ferry Terminal",,,245
+7,2,704,"Hannaford / Casco Bay Ferry Terminal",,,246
+7,2,705,"Hannaford / Casco Bay Ferry Terminal",,,247
+7,2,706,"Hannaford / Casco Bay Ferry Terminal",,,248
+7,2,707,"Hannaford / Casco Bay Ferry Terminal",,,249
+7,2,708,"Hannaford / Casco Bay Ferry Terminal",,,250
+7,2,709,"Hannaford / Casco Bay Ferry Terminal",,,251
+7,2,710,"Hannaford / Casco Bay Ferry Terminal",,,252
+7,2,711,"Hannaford / Casco Bay Ferry Terminal",,,253
+6,23,715,"Falmouth via US Route 1 / Metro Pulse",,,254
+6,23,716,"US Route 1 / Metro Pulse",,,255
+6,23,717,"US Route 1 / Metro Pulse",,,256
+6,23,718,"US Route 1 / Metro Pulse",,,257
+6,23,719,"US Route 1 / Metro Pulse",,,258
+6,23,720,"US Route 1 / Metro Pulse",,,259
+6,23,721,"US Route 1 / Metro Pulse",,,260
+6,23,722,"US Route 1 / Metro Pulse",,,261
+6,23,723,"US Route 1 / Metro Pulse",,,262
+6,23,724,"US Route 1 / Metro Pulse",,,263
+6,23,725,"US Route 1 / Metro Pulse",,,264
+6,23,726,"US Route 1 / Metro Pulse",,,265
+6,23,727,"US Route 1 / Metro Pulse",,,266
+8,1,736,"Riverside via Brighton Ave. / Westbrook Crossing",,,267
+8,1,737,"Riverside via Brighton Ave. / Westbrook Crossing",,,270
+8,1,738,"Riverside via Brighton Ave. / Westbrook Crossing",,,272
+8,1,739,"Riverside via Brighton Ave. / Westbrook Crossing",,,273
+8,1,740,"Riverside via Brighton Ave. / Westbrook Crossing",,,274
+8,1,741,"Riverside via Brighton Ave. / Westbrook Crossing",,,275
+8,1,742,"Riverside via Brighton Ave. / Westbrook Crossing",,,276
+8,1,743,"Riverside via Brighton Ave. / Westbrook Crossing",,,277
+8,1,744,"Riverside via Brighton Ave. / Westbrook Crossing",,,278
+8,1,745,"Riverside via Brighton Ave. / Westbrook Crossing",,,279
+8,1,746,"Riverside via Brighton Ave. / Westbrook Crossing",,,280
+8,1,747,"Riverside via Brighton Ave. / Westbrook Crossing",,,281
+8,1,748,"Riverside via Brighton Ave. / Westbrook Crossing",,,282
+8,1,749,"Riverside via Brighton Ave. / Westbrook Crossing",,,283
+8,1,750,"Riverside via Brighton Ave. / Westbrook Crossing",,,284
+8,1,751,"Riverside via Brighton Ave. / Westbrook Crossing",,,285
+8,1,752,"Riverside via Brighton Ave. / Westbrook Crossing",,,286
+8,1,753,"Riverside via Brighton Ave. / Westbrook Crossing",,,287
+8,1,754,"Riverside via Brighton Ave. / Westbrook Crossing",,,288
+8,1,755,"Riverside via Brighton Ave. / Westbrook Crossing",,,289
+8,1,756,"Riverside via Brighton Ave. / Westbrook Crossing",,,290
+8,1,757,"Riverside via Brighton Ave. / Westbrook Crossing",,,291
+8,1,758,"Riverside via Brighton Ave. / Westbrook Crossing",,,292
+8,1,759,"Riverside via Brighton Ave. / Westbrook Crossing",,,293
+8,1,760,"Riverside via Brighton Ave. / Westbrook Crossing",,,295
+8,1,761,"Riverside via Brighton Ave. / Westbrook Crossing",,,296
+8,1,762,"Riverside via Brighton Ave. / Westbrook Crossing",,,297
+8,1,763,"Riverside via Brighton Ave. / Westbrook Crossing",,,298
+8,1,782,"Riverside via Brighton Ave. / Westbrook Crossing",,,269
+8,1,783,"Riverside via Brighton Ave. / Westbrook Crossing",,,271
+8,2,784,"Riverside via Brighton Ave. and Woodford / Riverside",,,299
+8,2,785,"Riverside via Brighton Ave. and Woodford / Riverside",,,300
+8,2,786,"Riverside via Brighton Ave. and Woodford / Riverside",,,301
+8,2,787,"Riverside via Brighton Ave. and Woodford / Riverside",,,302
+8,2,788,"Riverside via Brighton Ave. and Woodford / Riverside",,,303
+8,2,789,"Riverside via Brighton Ave. and Woodford / Riverside",,,304
+8,2,790,"Riverside via Brighton Ave. and Woodford / Riverside",,,305
+8,2,791,"Riverside via Brighton Ave. and Woodford / Riverside",,,306
+8,2,792,"Riverside via Brighton Ave. and Woodford / Riverside",,,307
+8,2,793,"Riverside via Brighton Ave. and Woodford / Riverside",,,308
+8,2,794,"Riverside via Brighton Ave. and Woodford / Riverside",,,309
+8,2,795,"Riverside via Brighton Ave. and Woodford / Riverside",,,310
+8,2,796,"Riverside via Brighton Ave. and Woodford / Riverside",,,311
+8,2,797,"Riverside via Brighton Ave. and Woodford / Riverside",,,312
+8,2,798,"Riverside via Brighton Ave. and Woodford / Riverside",,,313
+8,2,799,"Riverside via Brighton Ave. and Woodford / Riverside",,,314
+8,2,800,"Riverside via Brighton Ave. and Woodford / Riverside",,,315
+8,2,801,"Riverside via Brighton Ave. and Woodford / Riverside",,,316
+8,2,802,"Riverside via Brighton Ave. and Woodford / Riverside",,,317
+8,2,803,"Riverside via Brighton Ave. and Woodford / Riverside",,,318
+8,2,804,"Riverside via Brighton Ave. and Woodford / Riverside",,,319
+8,2,805,"Riverside via Brighton Ave. and Woodford / Riverside",,,320
+8,2,806,"Riverside via Brighton Ave. and Woodford / Riverside",,,321
+8,2,807,"Riverside via Brighton Ave. and Woodford / Riverside",,,322
+8,2,808,"Riverside via Brighton Ave. and Woodford / Riverside",,,323
+8,2,809,"Riverside via Brighton Ave. and Woodford / Riverside",,,324
+8,2,810,"Riverside via Brighton Ave. and Woodford / Riverside",,,325
+8,2,811,"Riverside via Brighton Ave. and Woodford / Riverside",,,326
+8,2,812,"Riverside via Brighton Ave. and Woodford / Riverside",,,327
+8,2,813,"Riverside via Brighton Ave. and Woodford / Riverside",,,328
+4,1,832,"Maine Mall via PTC / Metro Pulse",,,91
+3,2,833,"North Deering / Metro Pulse",,,329
+3,2,834,"North Deering / Metro Pulse",,,330
+3,2,835,"North Deering / Metro Pulse",,,331
+3,2,836,"North Deering / Metro Pulse",,,332
+3,2,837,"North Deering / Metro Pulse",,,333
+3,2,838,"North Deering / Metro Pulse",,,334
+3,2,839,"North Deering / Metro Pulse",,,335
+3,2,840,"North Deering / Metro Pulse",,,336
+3,2,841,"North Deering / Metro Pulse",,,337
+3,2,842,"North Deering / Metro Pulse",,,338
+3,2,843,"North Deering / Metro Pulse",,,339
+3,2,844,"North Deering / Metro Pulse",,,340
+3,2,845,"North Deering / Metro Pulse",,,341
+3,2,846,"North Deering / Metro Pulse",,,342
+4,2,868,"Maine Mall via PTC / Metro Pulse",,,343
+4,2,870,"Maine Mall via PTC / Metro Pulse",,,344
+4,2,871,"Maine Mall via PTC / Metro Pulse",,,345
+4,2,872,"Maine Mall via PTC / Metro Pulse",,,346
+4,2,873,"Maine Mall via PTC / Metro Pulse",,,347
+4,2,874,"Maine Mall via PTC / Metro Pulse",,,348
+4,2,875,"Maine Mall via PTC / Metro Pulse",,,349
+4,2,876,"Maine Mall via PTC / Metro Pulse",,,350
+4,2,877,"Maine Mall via PTC / Metro Pulse",,,351
+4,2,878,"Maine Mall via PTC / Metro Pulse",,,352
+4,2,879,"Maine Mall via PTC / Metro Pulse",,,353
+4,2,880,"Maine Mall via PTC / Metro Pulse",,,354
+4,2,881,"Maine Mall via PTC / Metro Pulse",,,355
+4,2,882,"Maine Mall via PTC / Metro Pulse",,,356
+4,2,883,"Maine Mall via PTC / Metro Pulse",,,357
+4,2,884,"Maine Mall via PTC / Metro Pulse",,,358
+4,2,885,"Maine Mall via PTC / Metro Pulse",,,359
+4,2,886,"Maine Mall via PTC / Metro Pulse",,,360
+4,2,887,"Maine Mall via PTC / Metro Pulse",,,361
+4,2,888,"Maine Mall via PTC / Metro Pulse",,,362
+4,2,889,"Maine Mall via PTC / Metro Pulse",,,363
+4,2,890,"Maine Mall via PTC / Metro Pulse",,,364
+4,2,891,"Maine Mall via PTC / Metro Pulse",,,365
+4,2,892,"Maine Mall via PTC / Metro Pulse",,,366
+4,2,893,"Maine Mall via PTC / Metro Pulse",,,367
+4,2,894,"Maine Mall via PTC / Metro Pulse",,,368
+4,2,895,"Maine Mall via PTC / Metro Pulse",,,369
+4,2,896,"Maine Mall via PTC / Metro Pulse",,,370
+4,2,897,"Maine Mall via PTC / Metro Pulse",,,371
+4,2,898,"Maine Mall via PTC / Metro Pulse",,,372
+9,3,899,"Munjoy Hill",,,373
+9,3,900,"Munjoy Hill",,,374
+9,3,901,"Munjoy Hill",,,375
+9,3,902,"Munjoy Hill",,,376
+9,3,903,"Munjoy Hill",,,377
+9,3,904,"Munjoy Hill",,,378
+9,3,905,"Munjoy Hill",,,379
+9,3,906,"Munjoy Hill",,,380
+9,3,907,"Munjoy Hill",,,381
+9,3,908,"Munjoy Hill",,,382
+9,3,909,"Munjoy Hill",,,383
+9,3,910,"Munjoy Hill",,,384
+9,3,911,"St John St./PTC",,,385
+9,3,912,"St John St./PTC",,,386
+9,3,913,"St John St./PTC",,,387
+9,3,914,"St John St./PTC",,,388
+9,3,915,"St John St./PTC",,,389
+9,3,916,"St John St./PTC",,,390
+9,3,917,"St John St./PTC",,,391
+9,3,918,"St John St./PTC",,,392
+9,3,919,"St John St./PTC",,,393
+9,3,920,"St John St./PTC",,,394
+9,3,921,"St John St./PTC",,,395
+9,3,922,"St John St./PTC",,,396
+9,3,923,"St John St./PTC",,,397
+8,1,926,"Riverside via Brighton Ave. / Westbrook Crossing",,,268
+8,1,927,"Riverside via Brighton Ave. / Westbrook Crossing",,,294
+8,3,960,"Riverside via Woodford / Riverside",,,398
+8,3,961,"Riverside via Woodford / Riverside",,,399
+8,3,962,"Riverside via Woodford / Riverside",,,400
+8,3,963,"Riverside via Woodford / Riverside",,,401
+8,3,964,"Riverside via Woodford / Riverside",,,402
+8,3,965,"Riverside via Woodford / Riverside",,,403
+8,3,966,"Riverside via Woodford / Riverside",,,404
+1,1,990,"Munjoy Hill / St. John St.",,,165
+1,1,991,"Munjoy Hill / St. John St.",,,166
+1,1,992,"Munjoy Hill / St. John St.",,,163
+1,1,993,"Munjoy Hill / St. John St.",,,200
+1,1,994,"Munjoy Hill / St. John St.",,,202
+1,1,995,"Munjoy Hill / St. John St.",,,203
