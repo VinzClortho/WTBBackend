@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<config>
+    <gps_in_threads>
+        10
+    </gps_in_threads>
+    
+    <gtfs_dirs>
+        SPBS_GTFS, Metro_GTFS
+    </gtfs_dirs>
+    
+    <debug_display>
+        true
+    </debug_display>
+    
+    <drones_active>
+        true
+    </drones_active>
+    
+    <drone_speed>
+        20.0
+    </drone_speed>
+    
+    <drone_update_speed>
+        1.0
+    </drone_update_speed>
+    
+    <server_password>
+        password
+    </server_password>
+    
+    <server_port>
+        8080
+    </server_port>
+    
+    <coord_buffer_size>
+        10
+    </coord_buffer_size>
+
+    <packet_ok>
+        OK
+    </packet_ok>
+    
+    <packet_bad>
+        BAD
+    </packet_bad>
+    
+    <closeness_threshold>
+        250.0
+    </closeness_threshold>
+    
+    <edge_closeness_threshold>
+        20.0
+    </edge_closeness_threshold>
+    
+    <stop_window_margin>
+        10
+    </stop_window_margin>
+    
+    <vehicle_list_timeout>
+        300
+    </vehicle_list_timeout>
+</config>
