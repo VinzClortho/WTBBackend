@@ -131,7 +131,7 @@ public class Config {
 	/**
 	 * Return an integer value for a given key, or -1 if not exists.
 	 * @param key Reference key.
-	 * @return The integer value associated with the key, or -1 of not in list.
+	 * @return The integer value associated with the key, or -1 if not in list.
 	 */
 	public int getIntOption(String key) {
 		int ret = -1;
@@ -148,7 +148,7 @@ public class Config {
 	/**
 	 * Return a double value for a given key, or -1 if not exists.
 	 * @param key Reference key.
-	 * @return The double value associated with the key, or -1 of not in list.
+	 * @return The double value associated with the key, or NaN if not in list.
 	 */
 	public synchronized double getDoubleOption(String key) {
 		double ret = Double.NaN;
@@ -165,7 +165,7 @@ public class Config {
 	/**
 	 * Return a boolean value for a given key, or -1 if not exists.
 	 * @param key Reference key.
-	 * @return The boolean value associated with the key, or -1 of not in list.
+	 * @return The boolean value associated with the key, or simply false if not in list.
 	 */
 	public synchronized boolean getBooleanOption(String key) {
 		boolean ret = false;
