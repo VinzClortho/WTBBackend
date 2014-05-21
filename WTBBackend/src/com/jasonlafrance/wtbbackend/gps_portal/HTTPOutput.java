@@ -26,7 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- *
+ * Attempt to connect to a given URL and return a String.
  * @author Jason LaFrance
  */
 public class HTTPOutput {
@@ -34,6 +34,11 @@ public class HTTPOutput {
     private static final String USER_AGENT = "Mozilla/5.0";
 
     // HTTP GET request
+    /**
+     * Method to query an HTTP server.
+     * @param inUrl The URL to connect to and query.
+     * @return The data received from the server of just an empty String.
+     */
     public static String HTTPGet(String inUrl) {
         StringBuilder sb = new StringBuilder();
         BufferedReader in = null;

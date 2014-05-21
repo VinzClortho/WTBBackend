@@ -22,7 +22,7 @@ package com.jasonlafrance.wtbbackend.gps_portal;
 import java.nio.ByteBuffer;
 
 /**
- *
+ * GPS packet class.
  * @author Jason LaFrance
  */
 public class GPSPacket {
@@ -37,12 +37,22 @@ public class GPSPacket {
      * lon - 4 bytes
      */
 
+    /**
+     * Create a packet with given data
+     * @param inID ID number of vehicle.
+     * @param inLat Latitude
+     * @param inLon Longitude
+     */
     public GPSPacket(short inID, float inLat, float inLon) {
         id = inID;
         lat = inLat;
         lon = inLon;
     }
 
+    /**
+     * Create a packet from a given 12 byte array
+     * @param in A 12 byte array containing the raw GPS data.
+     */
     public GPSPacket(byte[] in) {
         if (in.length == 12 && in[0] == 'B' && in[1] == '@') {
             ByteBuffer bytes = ByteBuffer.wrap(in);
@@ -59,7 +69,10 @@ public class GPSPacket {
         }
     }
     
-    // pack up the values in the byte array
+    /**
+     * Pack up the packet's values into a byte array.
+     * @return A 12 byte array containing the packet's data.
+     */
     public byte[] getBytes() {
         ByteBuffer bytes = ByteBuffer.allocate(12);
         bytes.put((byte) 66);
@@ -70,14 +83,26 @@ public class GPSPacket {
         return bytes.array();
     }
 
+    /**
+     * Get the vehicle's ID
+     * @return The vehicle's ID
+     */
     public short getID() {
         return id;
     }
 
+    /**
+     * Get the vehicle's latitude.
+     * @return The vehicle's latidude.
+     */
     public float getLat() {
         return lat;
     }
 
+    /**
+     * Get the vehicle's longitude.
+     * @return The vehicle's longitude.
+     */
     public float getLon() {
         return lon;
     }

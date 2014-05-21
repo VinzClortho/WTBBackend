@@ -20,15 +20,5 @@
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/WTBBackend/.git</locationURI>
 		</link>
-		<link>
-			<name>src/.gitattributes</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/WTBBackend/.gitattributes</locationURI>
-		</link>
-		<link>
-			<name>src/.gitignore</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/WTBBackend/.gitignore</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>
