@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.gtfs;
 
@@ -26,104 +26,179 @@ import java.util.ArrayList;
 import com.jasonlafrance.wtbbackend.wtb_util.CSVParser;
 
 /**
- *
+ * GTFS CalendarDate class.
+ * 
  * @author Jason LaFrance
  */
 public final class CalendarDate extends GTFSParser {
 
-    private static final String _filename = "//calendar_dates.txt";
+	private static final String _filename = "//calendar_dates.txt";
 
-    private String _service_id = null;
-    private String _date = null;
-    private int _exception_type = -1;
+	private String _service_id = null;
+	private String _date = null;
+	private int _exception_type = -1;
 
-    public CalendarDate() {;
-    }
+	/**
+	 * Stub constructor
+	 */
+	public CalendarDate() {
+		;
+	}
 
-    public CalendarDate(
-            String inID,
-            String inDate,
-            int inType
-    ) {
-        _service_id = inID;
-        _date = inDate;
-        _exception_type = inType;
-    }
+	/**
+	 * Create a CalendarDate object from the given values.
+	 * 
+	 * @param inID
+	 *            The ID.
+	 * @param inDate
+	 *            The date.
+	 * @param inType
+	 *            The type.
+	 */
+	public CalendarDate(String inID, String inDate, int inType) {
+		_service_id = inID;
+		_date = inDate;
+		_exception_type = inType;
+	}
 
-    public CalendarDate(String inLine) {
-    }
-    
-    public CalendarDate(String inLine, int id) {
-        ArrayList<String> h = _headers.get(id).get(_filename);
-        String[] f = CSVParser.parseLine(inLine);
+	/**
+	 * Stub constructor
+	 * 
+	 * @param inLine
+	 *            A String.
+	 */
+	public CalendarDate(String inLine) {
+	}
 
-        if (f.length != h.size()) {
-            return;
-        }
+	/**
+	 * Create a CalendarDate object with a supplied line from a GTFS
+	 * calendar_dates.txt table.
+	 * 
+	 * @param inLine
+	 *            Line from a GTFS calendar_dates.txt table.
+	 * @param id
+	 *            The GTFS ID from the GTFS multition that this object belongs
+	 *            to.
+	 */
+	public CalendarDate(String inLine, int id) {
+		ArrayList<String> h = _headers.get(id).get(_filename);
+		String[] f = CSVParser.parseLine(inLine);
 
-        for (int i = 0; i < f.length; i++) {
-            switch (h.get(i)) {
-                case "date":
-                    set_date(f[i]);
-                    break;
-                case "exception_type":
-                    set_exception_type(f[i]);
-                    break;
-                case "service_id":
-                    set_service_id(f[i]);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+		if (f.length != h.size()) {
+			return;
+		}
 
-    public void set_service_id(String in) {
-            _service_id = in;
-    }
+		for (int i = 0; i < f.length; i++) {
+			switch (h.get(i)) {
+			case "date":
+				set_date(f[i]);
+				break;
+			case "exception_type":
+				set_exception_type(f[i]);
+				break;
+			case "service_id":
+				set_service_id(f[i]);
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
-    public void set_date(String in) {
-        _date = in;
-    }
+	/**
+	 * Set the service ID
+	 * 
+	 * @param in
+	 *            Service ID
+	 */
+	public void set_service_id(String in) {
+		_service_id = in;
+	}
 
-    public void set_exception_type(int in) {
-        _exception_type = in;
-    }
+	/**
+	 * Set date
+	 * 
+	 * @param in
+	 *            Date
+	 */
+	public void set_date(String in) {
+		_date = in;
+	}
 
-    public void set_exception_type(String in) {
-        try {
-            _exception_type = Integer.parseInt(in);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Set exception type
+	 * 
+	 * @param in
+	 *            exception type
+	 */
+	public void set_exception_type(int in) {
+		_exception_type = in;
+	}
 
-    public String get_service_id() {
-        return _service_id;
-    }
+	/**
+	 * Set exception type
+	 * 
+	 * @param in
+	 *            Exception type
+	 */
+	public void set_exception_type(String in) {
+		try {
+			_exception_type = Integer.parseInt(in);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    @Override
-    public int getID() {
-        return _service_id.hashCode();
-    }
+	/**
+	 * Get the service ID
+	 * 
+	 * @return Service ID
+	 */
+	public String get_service_id() {
+		return _service_id;
+	}
 
-    public String get_date() {
-        return _date;
-    }
+	/**
+	 * Get this objects unique ID.
+	 * 
+	 * @return This objects unique ID
+	 */
+	@Override
+	public int getID() {
+		return _service_id.hashCode();
+	}
 
-    public int get_exception_type() {
-        return _exception_type;
-    }
+	/**
+	 * Get the date
+	 * 
+	 * @return The date
+	 */
+	public String get_date() {
+		return _date;
+	}
 
-    @Override
-    public String toString() {
-        return _service_id + ","
-                + _date + ","
-                + _exception_type + "\n";
-    }
+	/**
+	 * Get the exception type
+	 * 
+	 * @return The exception type
+	 */
+	public int get_exception_type() {
+		return _exception_type;
+	}
 
-    @Override
-    public String getFilename() {
-        return _filename;
-    }
+	@Override
+	public String toString() {
+		return _service_id + "," + _date + "," + _exception_type + "\n";
+	}
+
+	/**
+	 * Get the GTFS file name associated with this object.
+	 * 
+	 * @return The GTFS file name associated with this object.
+	 */
+	@Override
+	public String getFilename() {
+		return _filename;
+	}
 
 }
