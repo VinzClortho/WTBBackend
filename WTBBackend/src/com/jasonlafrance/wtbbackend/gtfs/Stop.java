@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.gtfs;
 
@@ -27,351 +27,595 @@ import java.util.Comparator;
 import com.jasonlafrance.wtbbackend.wtb_util.CSVParser;
 
 /**
- *
+ * GTFS Stop class.
+ * 
  * @author Jason LaFrance
  */
 public final class Stop extends GTFSParser implements Comparator<Stop> {
 
-    private static final String _filename = "//stops.txt";
+	private static final String _filename = "//stops.txt";
 
-    private String _stop_id = null;
-    private String _stop_code = null;
-    private String _stop_name = null;
-    private String _stop_desc = null;
-    private double _stop_lat = 0.0;
-    private double _stop_lon = 0.0;
-    private String _zone_id = null;
-    private String _stop_url = null;
-    private int _location_type = -1;
-    private String _parent_station = null;
-    private String _stop_timezone = null;
-    private int _wheelchair_boarding = -1;
-    private String _position = null;
-    private String _direction = null;
-    private Route _route = null;
-    private Stop _nextStop = null;
-    private StopTime _stopTime = null;
+	private String _stop_id = null;
+	private String _stop_code = null;
+	private String _stop_name = null;
+	private String _stop_desc = null;
+	private double _stop_lat = 0.0;
+	private double _stop_lon = 0.0;
+	private String _zone_id = null;
+	private String _stop_url = null;
+	private int _location_type = -1;
+	private String _parent_station = null;
+	private String _stop_timezone = null;
+	private int _wheelchair_boarding = -1;
+	private String _position = null;
+	private String _direction = null;
+	private Route _route = null;
+	private Stop _nextStop = null;
+	private StopTime _stopTime = null;
 
-    public Stop() {;
-    }
+	/**
+	 * Stub constructor
+	 */
+	public Stop() {
+	}
 
-    public Stop(
-            String inID,
-            String inName,
-            String inDesc,
-            double inLat,
-            double inLon,
-            String inZoneID,
-            String inUrl,
-            int inType,
-            String inParent) {
-        _stop_id = inID;
-        _stop_name = inName;
-        _stop_desc = inDesc;
-        _stop_lat = inLat;
-        _stop_lon = inLon;
-        _zone_id = inZoneID;
-        _stop_url = inUrl;
-        _location_type = inType;
-        _parent_station = inParent;
-    }
+	/**
+	 * Stub constructor
+	 * 
+	 * @param inLine
+	 *            A String
+	 */
+	public Stop(String inLine) {
+	}
 
-    public Stop(String inLine) {
-    }
+	/**
+	 * Create a Stop object with a supplied line from a GTFS stops.txt table.
+	 * 
+	 * @param inLine
+	 *            Line from a GTFS stops.txt table.
+	 * @param id
+	 *            The GTFS ID from the GTFS multition that this object belongs
+	 *            to.
+	 */
+	public Stop(String inLine, int id) {
+		ArrayList<String> h = _headers.get(id).get(_filename);
+		String[] f = CSVParser.parseLine(inLine);
 
-    public Stop(String inLine, int id) {
-        ArrayList<String> h = _headers.get(id).get(_filename);
-        String[] f = CSVParser.parseLine(inLine);
+		if (f.length != h.size()) {
+			return;
+		}
 
-        if (f.length != h.size()) {
-            return;
-        }
+		for (int i = 0; i < f.length; i++) {
+			switch (h.get(i)) {
+			case "direction":
+				set_direction(f[i]);
+				break;
+			case "location_type":
+				set_location_type(f[i]);
+				break;
+			case "parent_station":
+				set_parent_station(f[i]);
+				break;
+			case "position":
+				set_position(f[i]);
+				break;
+			case "stop_code":
+				set_stop_code(f[i]);
+				break;
+			case "stop_desc":
+				set_stop_desc(f[i]);
+				break;
+			case "stop_id":
+				set_stop_id(f[i]);
+				break;
+			case "stop_lat":
+				set_stop_lat(f[i]);
+				break;
+			case "stop_lon":
+				set_stop_lon(f[i]);
+				break;
+			case "stop_name":
+				set_stop_name(f[i]);
+				break;
+			case "stop_timezone":
+				set_stop_timezone(f[i]);
+				break;
+			case "stop_url":
+				set_stop_url(f[i]);
+				break;
+			case "wheelchair_boarding":
+				set_wheelchair_boarding(f[i]);
+				break;
+			case "zone_id":
+				set_zone_id(f[i]);
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
-        for (int i = 0; i < f.length; i++) {
-            switch (h.get(i)) {
-                case "direction":
-                    set_direction(f[i]);
-                    break;
-                case "location_type":
-                    set_location_type(f[i]);
-                    break;
-                case "parent_station":
-                    set_parent_station(f[i]);
-                    break;
-                case "position":
-                    set_position(f[i]);
-                    break;
-                case "stop_code":
-                    set_stop_code(f[i]);
-                    break;
-                case "stop_desc":
-                    set_stop_desc(f[i]);
-                    break;
-                case "stop_id":
-                    set_stop_id(f[i]);
-                    break;
-                case "stop_lat":
-                    set_stop_lat(f[i]);
-                    break;
-                case "stop_lon":
-                    set_stop_lon(f[i]);
-                    break;
-                case "stop_name":
-                    set_stop_name(f[i]);
-                    break;
-                case "stop_timezone":
-                    set_stop_timezone(f[i]);
-                    break;
-                case "stop_url":
-                    set_stop_url(f[i]);
-                    break;
-                case "wheelchair_boarding":
-                    set_wheelchair_boarding(f[i]);
-                    break;
-                case "zone_id":
-                    set_zone_id(f[i]);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+	/**
+	 * Create a Stop object from the given values
+	 * 
+	 * @param inID
+	 *            Stop ID
+	 * @param inName
+	 *            Name
+	 * @param inDesc
+	 *            Description
+	 * @param inLat
+	 *            Latitude
+	 * @param inLon
+	 *            Longitude
+	 * @param inZoneID
+	 *            Zone ID
+	 * @param inUrl
+	 *            URL
+	 * @param inType
+	 *            Location type
+	 * @param inParent
+	 *            Parent station
+	 */
+	public Stop(String inID, String inName, String inDesc, double inLat,
+			double inLon, String inZoneID, String inUrl, int inType,
+			String inParent) {
+		_stop_id = inID;
+		_stop_name = inName;
+		_stop_desc = inDesc;
+		_stop_lat = inLat;
+		_stop_lon = inLon;
+		_zone_id = inZoneID;
+		_stop_url = inUrl;
+		_location_type = inType;
+		_parent_station = inParent;
+	}
 
-    public void setNextStop(Stop in) {
-        _nextStop = in;
-    }
+	public int compare(Stop in) {
+		return this.compare(this, in);
+	}
 
-    public Stop getNextStop() {
-        return _nextStop;
-    }
+	// TODO need this?
+	@Override
+	public int compare(Stop o1, Stop o2) {
+		// if(o1.getStopTime()
+		return 0;
+	}
 
-    public void set_stop_id(String in) {
-        _stop_id = in;
-    }
+	/**
+	 * Get the direction
+	 * 
+	 * @return Direction
+	 */
+	public String get_direction() {
+		return _direction;
+	}
 
-    public void set_stop_code(String in) {
-        _stop_code = in;
-    }
+	/**
+	 * Get the location type
+	 * 
+	 * @return Location type
+	 */
+	public int get_location_type() {
+		return _location_type;
+	}
 
-    public void set_stop_name(String in) {
-        _stop_name = in;
-    }
+	/**
+	 * Get the parent station
+	 * 
+	 * @return Parent station
+	 */
+	public String get_parent_station() {
+		return _parent_station;
+	}
 
-    public void set_stop_desc(String in) {
-        _stop_desc = in;
-    }
+	/**
+	 * Get the position
+	 * 
+	 * @return Position
+	 */
+	public String get_position() {
+		return _position;
+	}
 
-    public void set_stop_lat(double in) {
-        _stop_lat = in;
-    }
+	/**
+	 * Get the stop code
+	 * 
+	 * @return Stop code
+	 */
+	public String get_stop_code() {
+		return _stop_code;
+	}
 
-    public void set_stop_lat(String in) {
-        try {
-            _stop_lat = Double.parseDouble(in);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get the stop description
+	 * 
+	 * @return Stop description
+	 */
+	public String get_stop_desc() {
+		return _stop_desc;
+	}
 
-    public void set_stop_lon(double in) {
-        _stop_lon = in;
-    }
+	/**
+	 * Get the stop ID
+	 * 
+	 * @return Stop ID
+	 */
+	public String get_stop_id() {
+		return _stop_id;
+	}
 
-    public void set_stop_lon(String in) {
-        try {
-            _stop_lon = Double.parseDouble(in);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get the latitude
+	 * 
+	 * @return Latitude
+	 */
+	public double get_stop_lat() {
+		return _stop_lat;
+	}
 
-    public void setCoordinates(double inLat, double inLon) {
-        _stop_lat = inLat;
-        _stop_lon = inLon;
-    }
+	/**
+	 * Get the longitude
+	 * 
+	 * @return Longitude
+	 */
+	public double get_stop_lon() {
+		return _stop_lon;
+	}
 
-    public void set_zone_id(String in) {
-        _zone_id = in;
-    }
+	/**
+	 * Get stop name
+	 * 
+	 * @return Name
+	 */
+	public String get_stop_name() {
+		return _stop_name;
+	}
 
-    public void set_stop_url(String in) {
-        _stop_url = in;
-    }
+	/**
+	 * Get time zone
+	 * 
+	 * @return Time zone
+	 */
+	public String get_stop_timezone() {
+		return _stop_timezone;
+	}
 
-    public void set_location_type(int in) {
-        _location_type = in;
-    }
+	/**
+	 * Get stop's URL
+	 * 
+	 * @return URL
+	 */
+	public String get_stop_url() {
+		return _stop_url;
+	}
 
-    public void set_location_type(String in) {
-        try {
-            _location_type = Integer.parseInt(in);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get if wheelchairs can board here
+	 * 
+	 * @return If wheelchairs can board here
+	 */
+	public int get_wheelchair_boarding() {
+		return _wheelchair_boarding;
+	}
 
-    public void set_parent_station(String in) {
-        _parent_station = in;
-    }
+	/**
+	 * Get the zone ID
+	 * 
+	 * @return Zone ID
+	 */
+	public String get_zone_id() {
+		return _zone_id;
+	}
 
-    public void set_stop_timezone(String in) {
-        _stop_timezone = in;
-    }
+	/**
+	 * Get the GTFS file name associated with this object.
+	 * 
+	 * @return The GTFS file name associated with this object.
+	 */
+	@Override
+	public String getFilename() {
+		return _filename;
+	}
 
-    public void set_wheelchair_boarding(int in) {
-        _wheelchair_boarding = in;
-    }
+	/**
+	 * Get this objects unique ID.
+	 * 
+	 * @return This objects unique ID
+	 */
+	@Override
+	public int getID() {
+		return _stop_id.hashCode();
+	}
 
-    public void set_wheelchair_boarding(String in) {
-        try {
-            _wheelchair_boarding = Integer.parseInt(in);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get next stop
+	 * 
+	 * @return Next Stop
+	 */
+	public Stop getNextStop() {
+		return _nextStop;
+	}
 
-    public void setStopTime(StopTime in) {
-        _stopTime = in;
-    }
+	/**
+	 * Get this stop's Route object
+	 * 
+	 * @return This stop's Route
+	 */
+	public Route getRoute() {
+		return _route;
+	}
 
-    // getters
-    @Override
-    public int getID() {
-        return _stop_id.hashCode();
-    }
+	/*
+	 * @Override public Stop clone() { Stop s = new Stop( _stop_id, _stop_name,
+	 * _stop_desc, _stop_lat, _stop_lon, _zone_id, _stop_url, _location_type,
+	 * _parent_station); s.setGTFS_ID(this.getGTFS_ID());
+	 * 
+	 * return s; }
+	 */
 
-    public String get_stop_id() {
-        return _stop_id;
-    }
+	/**
+	 * Get StopTime object
+	 * 
+	 * @return This stop's StopTime object
+	 */
+	public StopTime getStopTime() {
+		return _stopTime;
+	}
 
-    public String get_stop_code() {
-        return _stop_code;
-    }
+	/**
+	 * Get a Vertex representation of this Stop
+	 * 
+	 * @return Vertex version of this stop
+	 */
+	public Vertex getVertex() {
+		return new Vertex("", _stop_lat, _stop_lon, 0, 0.0);
+	}
 
-    public String get_stop_name() {
-        return _stop_name;
-    }
+	/**
+	 * Set the direction
+	 * 
+	 * @param _direction
+	 *            The direction to set
+	 */
+	public void set_direction(String _direction) {
+		this._direction = _direction;
+	}
 
-    public String get_stop_desc() {
-        return _stop_desc;
-    }
+	/**
+	 * Set the location type
+	 * 
+	 * @param in
+	 *            Location type
+	 */
+	public void set_location_type(int in) {
+		_location_type = in;
+	}
 
-    public double get_stop_lat() {
-        return _stop_lat;
-    }
+	/**
+	 * Set the location type
+	 * 
+	 * @param in
+	 *            Location type
+	 */
+	public void set_location_type(String in) {
+		try {
+			_location_type = Integer.parseInt(in);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    public double get_stop_lon() {
-        return _stop_lon;
-    }
+	/**
+	 * Set the parent station
+	 * 
+	 * @param in
+	 *            Parent station
+	 */
+	public void set_parent_station(String in) {
+		_parent_station = in;
+	}
 
-    public Vertex getVertex() {
-        return new Vertex("", _stop_lat, _stop_lon, 0, 0.0);
-    }
+	/**
+	 * Set the position
+	 * 
+	 * @param _position
+	 *            The position to set
+	 */
+	public void set_position(String _position) {
+		this._position = _position;
+	}
 
-    public String get_zone_id() {
-        return _zone_id;
-    }
+	/**
+	 * Set the stop code
+	 * 
+	 * @param in
+	 *            Stop code
+	 */
+	public void set_stop_code(String in) {
+		_stop_code = in;
+	}
 
-    public String get_stop_url() {
-        return _stop_url;
-    }
+	/**
+	 * Set the description
+	 * 
+	 * @param in
+	 *            Description
+	 */
+	public void set_stop_desc(String in) {
+		_stop_desc = in;
+	}
 
-    public int get_location_type() {
-        return _location_type;
-    }
+	/**
+	 * Set this stop's ID
+	 * 
+	 * @param in
+	 *            ID
+	 */
+	public void set_stop_id(String in) {
+		_stop_id = in;
+	}
 
-    public String get_parent_station() {
-        return _parent_station;
-    }
+	/**
+	 * Set latitude
+	 * 
+	 * @param in
+	 *            Latitude
+	 */
+	public void set_stop_lat(double in) {
+		_stop_lat = in;
+	}
 
-    public String get_stop_timezone() {
-        return _stop_timezone;
-    }
+	/**
+	 * Set latitude
+	 * 
+	 * @param in
+	 *            Latitude
+	 */
+	public void set_stop_lat(String in) {
+		try {
+			_stop_lat = Double.parseDouble(in);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    public int get_wheelchair_boarding() {
-        return _wheelchair_boarding;
-    }
+	/**
+	 * Set longitude
+	 * 
+	 * @param in
+	 *            Longitude
+	 */
+	public void set_stop_lon(double in) {
+		_stop_lon = in;
+	}
 
-    public StopTime getStopTime() {
-        return _stopTime;
-    }
+	/**
+	 * Set longitude
+	 * 
+	 * @param in
+	 *            Longitude
+	 */
+	public void set_stop_lon(String in) {
+		try {
+			_stop_lon = Double.parseDouble(in);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    public void setRoute(Route in) {
-        _route = in;
-    }
+	/**
+	 * Set name
+	 * 
+	 * @param in
+	 *            Name
+	 */
+	public void set_stop_name(String in) {
+		_stop_name = in;
+	}
 
-    public Route getRoute() {
-        return _route;
-    }
-    /*
-     @Override
-     public Stop clone() {
-     Stop s
-     = new Stop(
-     _stop_id,
-     _stop_name,
-     _stop_desc,
-     _stop_lat,
-     _stop_lon,
-     _zone_id,
-     _stop_url,
-     _location_type,
-     _parent_station);
-     s.setGTFS_ID(this.getGTFS_ID());
+	/**
+	 * Set time zone
+	 * 
+	 * @param in
+	 *            Time zone
+	 */
+	public void set_stop_timezone(String in) {
+		_stop_timezone = in;
+	}
 
-     return s;
-     }
-     */
+	/**
+	 * Set stop's URL
+	 * 
+	 * @param in
+	 *            URL
+	 */
+	public void set_stop_url(String in) {
+		_stop_url = in;
+	}
 
-    @Override
-    public String toString() {
-        return _stop_id + ","
-                + _stop_name + ","
-                + _stop_desc + ","
-                + _stop_lat + ","
-                + _stop_lon + ","
-                + _zone_id + ","
-                + _stop_url + ","
-                + _location_type + ","
-                + _parent_station + "\n";
-    }
+	/**
+	 * Set if wheelchair boarding is allowed here
+	 * 
+	 * @param in
+	 *            If wheelchair boarding is allowed here
+	 */
+	public void set_wheelchair_boarding(int in) {
+		_wheelchair_boarding = in;
+	}
 
-    @Override
-    public int compare(Stop o1, Stop o2) {
-        //if(o1.getStopTime()
-        return 0;
-    }
+	/**
+	 * Set if wheelchair boarding is allowed here
+	 * 
+	 * @param in
+	 *            If wheelchair boarding is allowed here
+	 */
 
-    public int compare(Stop in) {
-        return this.compare(this, in);
-    }
+	public void set_wheelchair_boarding(String in) {
+		try {
+			_wheelchair_boarding = Integer.parseInt(in);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    @Override
-    public String getFilename() {
-        return _filename;
-    }
+	/**
+	 * Set zone ID
+	 * 
+	 * @param in
+	 *            Zone ID
+	 */
+	public void set_zone_id(String in) {
+		_zone_id = in;
+	}
 
-    /**
-     * @return the _position
-     */
-    public String get_position() {
-        return _position;
-    }
+	/**
+	 * Set stop longitude and latitude both at once
+	 * 
+	 * @param inLat
+	 *            Latitude
+	 * @param inLon
+	 *            Longitude
+	 */
+	public void setCoordinates(double inLat, double inLon) {
+		_stop_lat = inLat;
+		_stop_lon = inLon;
+	}
 
-    /**
-     * @param _position the _position to set
-     */
-    public void set_position(String _position) {
-        this._position = _position;
-    }
+	/**
+	 * Set next stop reference
+	 * 
+	 * @param in
+	 *            Next stop object
+	 */
+	public void setNextStop(Stop in) {
+		_nextStop = in;
+	}
 
-    /**
-     * @return the _direction
-     */
-    public String get_direction() {
-        return _direction;
-    }
+	/**
+	 * Set Route object
+	 * 
+	 * @param in
+	 *            Route object
+	 */
+	public void setRoute(Route in) {
+		_route = in;
+	}
 
-    /**
-     * @param _direction the _direction to set
-     */
-    public void set_direction(String _direction) {
-        this._direction = _direction;
-    }
+	/**
+	 * Set StopTime object
+	 * 
+	 * @param in
+	 *            StopTime object
+	 */
+	public void setStopTime(StopTime in) {
+		_stopTime = in;
+	}
+
+	@Override
+	public String toString() {
+		return _stop_id + "," + _stop_name + "," + _stop_desc + "," + _stop_lat
+				+ "," + _stop_lon + "," + _zone_id + "," + _stop_url + ","
+				+ _location_type + "," + _parent_station + "\n";
+	}
 }

@@ -32,9 +32,9 @@ import org.xml.sax.SAXException;
 
 /**
  * Configuration management singleton class.
+ * 
  * @author Jason LaFrance
  */
-
 
 public class Config {
 
@@ -59,6 +59,7 @@ public class Config {
 
 	/**
 	 * Method to return the Config singleton object.
+	 * 
 	 * @return Returns the singleton Config instance
 	 */
 	public static Config getInstance() {
@@ -67,8 +68,7 @@ public class Config {
 		}
 		return sInstance;
 	}
-	
-	
+
 	/**
 	 * Config constructor
 	 */
@@ -77,10 +77,84 @@ public class Config {
 	}
 
 	/**
-	 * Load an XML config file.
-	 * @param filename File name of config file.
+	 * Return a boolean value for a given key, or -1 if not exists.
+	 * 
+	 * @param key
+	 *            Reference key.
+	 * @return The boolean value associated with the key, or simply false if not
+	 *         in list.
 	 */
-	
+	public synchronized boolean getBooleanOption(String key) {
+		boolean ret = false;
+		if (key == null)
+			return ret;
+		String value = sOptions.get(key).toLowerCase();
+
+		if (value != null) {
+			if (value.equals("true") || value.equals("t")) {
+				ret = true;
+			}
+		}
+
+		return ret;
+	}
+
+	/**
+	 * Return a double value for a given key, or -1 if not exists.
+	 * 
+	 * @param key
+	 *            Reference key.
+	 * @return The double value associated with the key, or NaN if not in list.
+	 */
+	public synchronized double getDoubleOption(String key) {
+		double ret = Double.NaN;
+		if (key == null)
+			return ret;
+		try {
+			ret = Double.parseDouble(sOptions.get(key));
+		} catch (NumberFormatException ex) {
+			;
+		}
+		return ret;
+	}
+
+	/**
+	 * Return an integer value for a given key, or -1 if not exists.
+	 * 
+	 * @param key
+	 *            Reference key.
+	 * @return The integer value associated with the key, or -1 if not in list.
+	 */
+	public int getIntOption(String key) {
+		int ret = -1;
+		if (key == null)
+			return ret;
+		try {
+			ret = Integer.parseInt(sOptions.get(key));
+		} catch (NumberFormatException ex) {
+			;
+		}
+		return ret;
+	}
+
+	/**
+	 * Returns the String value mathcing a given key, or null if not in config.
+	 * 
+	 * @param key
+	 *            String key of config item.
+	 * @return String value associated with the key or null is not found.
+	 */
+	public String getOption(String key) {
+		return sOptions.get(key);
+	}
+
+	/**
+	 * Load an XML config file.
+	 * 
+	 * @param filename
+	 *            File name of config file.
+	 */
+
 	public void load(String filename) {
 		try {
 			File fXmlFile = new File(filename);
@@ -111,74 +185,14 @@ public class Config {
 	}
 
 	/**
-	 * Returns the String value mathcing a given key, or null if not in config.
-	 * @param key String key of config item.
-	 * @return String value associated with the key or null is not found.
-	 */
-	public String getOption(String key) {
-		return sOptions.get(key);
-	}
-
-	/**
 	 * Add a key/value pair into the Config
-	 * @param key Reference key.
-	 * @param value Value to associate with key.
+	 * 
+	 * @param key
+	 *            Reference key.
+	 * @param value
+	 *            Value to associate with key.
 	 */
 	public void putOption(String key, String value) {
 		sOptions.put(key, value);
-	}
-
-	/**
-	 * Return an integer value for a given key, or -1 if not exists.
-	 * @param key Reference key.
-	 * @return The integer value associated with the key, or -1 if not in list.
-	 */
-	public int getIntOption(String key) {
-		int ret = -1;
-		if (key == null)
-			return ret;
-		try {
-			ret = Integer.parseInt(sOptions.get(key));
-		} catch (NumberFormatException ex) {
-			;
-		}
-		return ret;
-	}
-
-	/**
-	 * Return a double value for a given key, or -1 if not exists.
-	 * @param key Reference key.
-	 * @return The double value associated with the key, or NaN if not in list.
-	 */
-	public synchronized double getDoubleOption(String key) {
-		double ret = Double.NaN;
-		if (key == null)
-			return ret;
-		try {
-			ret = Double.parseDouble(sOptions.get(key));
-		} catch (NumberFormatException ex) {
-			;
-		}
-		return ret;
-	}
-
-	/**
-	 * Return a boolean value for a given key, or -1 if not exists.
-	 * @param key Reference key.
-	 * @return The boolean value associated with the key, or simply false if not in list.
-	 */
-	public synchronized boolean getBooleanOption(String key) {
-		boolean ret = false;
-		if (key == null)
-			return ret;
-		String value = sOptions.get(key).toLowerCase();
-
-		if (value != null) {
-			if (value.equals("true") || value.equals("t")) {
-				ret = true;
-			}
-		}
-
-		return ret;
 	}
 }

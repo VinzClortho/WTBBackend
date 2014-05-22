@@ -42,23 +42,6 @@ public final class CalendarDate extends GTFSParser {
 	 * Stub constructor
 	 */
 	public CalendarDate() {
-		;
-	}
-
-	/**
-	 * Create a CalendarDate object from the given values.
-	 * 
-	 * @param inID
-	 *            The ID.
-	 * @param inDate
-	 *            The date.
-	 * @param inType
-	 *            The type.
-	 */
-	public CalendarDate(String inID, String inDate, int inType) {
-		_service_id = inID;
-		_date = inDate;
-		_exception_type = inType;
 	}
 
 	/**
@@ -106,13 +89,66 @@ public final class CalendarDate extends GTFSParser {
 	}
 
 	/**
-	 * Set the service ID
+	 * Create a CalendarDate object from the given values.
 	 * 
-	 * @param in
-	 *            Service ID
+	 * @param inID
+	 *            The ID.
+	 * @param inDate
+	 *            The date.
+	 * @param inType
+	 *            The type.
 	 */
-	public void set_service_id(String in) {
-		_service_id = in;
+	public CalendarDate(String inID, String inDate, int inType) {
+		_service_id = inID;
+		_date = inDate;
+		_exception_type = inType;
+	}
+
+	/**
+	 * Get the date
+	 * 
+	 * @return The date
+	 */
+	public String get_date() {
+		return _date;
+	}
+
+	/**
+	 * Get the exception type
+	 * 
+	 * @return The exception type
+	 */
+	public int get_exception_type() {
+		return _exception_type;
+	}
+
+	/**
+	 * Get the service ID
+	 * 
+	 * @return Service ID
+	 */
+	public String get_service_id() {
+		return _service_id;
+	}
+
+	/**
+	 * Get the GTFS file name associated with this object.
+	 * 
+	 * @return The GTFS file name associated with this object.
+	 */
+	@Override
+	public String getFilename() {
+		return _filename;
+	}
+
+	/**
+	 * Get this objects unique ID.
+	 * 
+	 * @return This objects unique ID
+	 */
+	@Override
+	public int getID() {
+		return _service_id.hashCode();
 	}
 
 	/**
@@ -150,55 +186,18 @@ public final class CalendarDate extends GTFSParser {
 	}
 
 	/**
-	 * Get the service ID
+	 * Set the service ID
 	 * 
-	 * @return Service ID
+	 * @param in
+	 *            Service ID
 	 */
-	public String get_service_id() {
-		return _service_id;
-	}
-
-	/**
-	 * Get this objects unique ID.
-	 * 
-	 * @return This objects unique ID
-	 */
-	@Override
-	public int getID() {
-		return _service_id.hashCode();
-	}
-
-	/**
-	 * Get the date
-	 * 
-	 * @return The date
-	 */
-	public String get_date() {
-		return _date;
-	}
-
-	/**
-	 * Get the exception type
-	 * 
-	 * @return The exception type
-	 */
-	public int get_exception_type() {
-		return _exception_type;
+	public void set_service_id(String in) {
+		_service_id = in;
 	}
 
 	@Override
 	public String toString() {
 		return _service_id + "," + _date + "," + _exception_type + "\n";
-	}
-
-	/**
-	 * Get the GTFS file name associated with this object.
-	 * 
-	 * @return The GTFS file name associated with this object.
-	 */
-	@Override
-	public String getFilename() {
-		return _filename;
 	}
 
 }

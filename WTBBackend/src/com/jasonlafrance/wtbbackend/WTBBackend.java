@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend;
 
@@ -37,133 +37,140 @@ import com.jasonlafrance.wtbbackend.vehicle.DroneQueue;
 import com.jasonlafrance.wtbbackend.vehicle.Vehicle;
 
 /**
- *
- * @author Gozer
+ * 
+ * @author Jason LaFrance
  */
 public class WTBBackend {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        boolean ok = false;
+	private static void clearKMLs() {
+		File dir = new File("./");
 
-        long startTime, endTime;
-        LinkedList<Drone> mDroneArm = new LinkedList<>();
-        DroneQueue droneQueue = new DroneQueue(mDroneArm);
+		for (File f : dir.listFiles()) {
+			if (f.isFile() && f.getName().toLowerCase().endsWith(".kml")) {
+				f.delete();
+				System.out.println("Deleting " + f.getName());
+			}
+		}
+	}
 
-        // load the config options
-        Config config = Config.get();
-        config.load("config.xml");
+	/**
+	 * @param args
+	 *            the command line arguments
+	 */
+	public static void main(String[] args) {
+		boolean ok = false;
 
-        // erase old kmls
-        clearKMLs();
+		long startTime, endTime;
+		LinkedList<Drone> mDroneArm = new LinkedList<>();
+		DroneQueue droneQueue = new DroneQueue(mDroneArm);
 
-        String dirs[] = config.getOption(Config.GTFS_DIRS).split(",");
-        int timeGap = config.getIntOption(Config.GTFS_TIME_GAP);
+		// load the config options
+		Config config = Config.getInstance();
+		config.load("config.xml");
 
-        GraphFrame gp = null;
-        if (config.getBooleanOption(Config.DEBUG_DISPLAY)) {
-            gp = new GraphFrame();
-        }
+		// erase old kmls
+		clearKMLs();
 
-        final String password = Config.get().getOption(Config.SERVER_PASSWORD);
-        final int port = Config.get().getIntOption(Config.SERVER_PORT);
+		String dirs[] = config.getOption(Config.GTFS_DIRS).split(",");
+		int timeGap = config.getIntOption(Config.GTFS_TIME_GAP);
 
-        GPSPortal g = new GPSPortal(port, password);
+		GraphFrame gp = null;
+		if (config.getBooleanOption(Config.DEBUG_DISPLAY)) {
+			gp = new GraphFrame();
+		}
 
-        int id = 1;
-        final double busSpeed = Config.get().getDoubleOption(Config.DRONE_SPEED);
-        final double busUpdateTime = Config.get().getDoubleOption(Config.DRONE_UPDATE_SPEED);
+		final String password = Config.getInstance().getOption(
+				Config.SERVER_PASSWORD);
+		final int port = Config.getInstance().getIntOption(Config.SERVER_PORT);
 
-        boolean dronesActive = config.getBooleanOption(Config.DRONES_ACTIVE);
+		GPSPortal g = new GPSPortal(port, password);
 
-        if (dronesActive) {
-            System.out.println("Drones Active!");
-        }
+		int id = 1;
+		final double busSpeed = Config.getInstance().getDoubleOption(
+				Config.DRONE_SPEED);
+		final double busUpdateTime = Config.getInstance().getDoubleOption(
+				Config.DRONE_UPDATE_SPEED);
 
-        ArrayList<GTFS> gtfs = new ArrayList<>();
+		boolean dronesActive = config.getBooleanOption(Config.DRONES_ACTIVE);
 
-        for (String dir : dirs) {
-            dir = dir.trim();
+		if (dronesActive) {
+			System.out.println("Drones Active!");
+		}
 
-            System.out.println(dir + "\n----------");
-            try {
-                startTime = System.currentTimeMillis();
+		ArrayList<GTFS> gtfs = new ArrayList<>();
 
-                GTFS current = new GTFS(dir, timeGap);
-                gtfs.add(current);
+		for (String dir : dirs) {
+			dir = dir.trim();
 
-                endTime = System.currentTimeMillis();
-                System.out.println(dir + " loaded and parsed in " + ((endTime - startTime) / 1000.0) + " seconds");
+			System.out.println(dir + "\n----------");
+			try {
+				startTime = System.currentTimeMillis();
 
-                current.calcExtremes();
+				GTFS current = new GTFS(dir, timeGap);
+				gtfs.add(current);
 
-                System.out.println(dir + " id: " + current.getID());
+				endTime = System.currentTimeMillis();
+				System.out.println(dir + " loaded and parsed in "
+						+ ((endTime - startTime) / 1000.0) + " seconds");
 
-                if (config.getBooleanOption(Config.DEBUG_DISPLAY)) {
-                    gp.adjustViewport(current.getMinLon(), current.getMinLat(),
-                            current.getMaxLon(), current.getMaxLat());
-                    gp.addPaths(current.getPaths());
-                }
-                if (dronesActive) {
-                    for (int i = 0; i < current.getPaths().size(); i++) {
-                        // generate timecode for right now
-                        int now = timeToMinutes(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                        if (current.isValidService(current.getPaths().get(i).getServiceID())
-                                && current.getPaths().get(i).getEndTimecode() > now) {
-                            System.out.println(dir + ": " + current.getPaths().get(i));
-                            droneQueue.addDrone(new Drone(id,
-                                    current.getPaths().get(i),
-                                    busSpeed,
-                                    busUpdateTime,
-                                    "http://127.0.0.1:8080",
-                                    password,
-                                    false));
-                            id++;
-                        }
-                    }
-                }
+				current.calcExtremes();
 
-                ok = true;
-            } catch (Exception e) {
-                System.out.println(e.toString());
-                System.exit(-1);
-            }
-            System.out.println();
-        }
+				System.out.println(dir + " id: " + current.getID());
 
-        if (config.getBooleanOption(Config.DEBUG_DISPLAY)) {
-            gp.setVisible(true);
-        }
-        boolean running = true;
-        int vListTimeout = Config.get().getIntOption(Config.VEHICLE_LIST_TIMEOUT);
-        
-        System.out.println("Running...");
-        
-       
-        while (running) {
-            int now = timeToMinutes(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-            Vehicle.cleanUp(vListTimeout);
-            droneQueue.check(now);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(WTBBackend.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.gc();
-            running = !droneQueue.isEmpty();
-        }
-    }
+				if (config.getBooleanOption(Config.DEBUG_DISPLAY)) {
+					gp.adjustViewport(current.getMinLon(), current.getMinLat(),
+							current.getMaxLon(), current.getMaxLat());
+					gp.addPaths(current.getPaths());
+				}
+				if (dronesActive) {
+					for (int i = 0; i < current.getPaths().size(); i++) {
+						// generate timecode for right now
+						int now = timeToMinutes(new SimpleDateFormat("HH:mm:ss")
+								.format(new Date()));
+						if (current.isValidService(current.getPaths().get(i)
+								.getServiceID())
+								&& current.getPaths().get(i).getEndTimecode() > now) {
+							System.out.println(dir + ": "
+									+ current.getPaths().get(i));
+							droneQueue.addDrone(new Drone(id, current
+									.getPaths().get(i), busSpeed,
+									busUpdateTime, "http://127.0.0.1:8080",
+									password, false));
+							id++;
+						}
+					}
+				}
 
-    private static void clearKMLs() {
-        File dir = new File("./");
+				ok = true;
+			} catch (Exception e) {
+				System.out.println(e.toString());
+				System.exit(-1);
+			}
+			System.out.println();
+		}
 
-        for (File f : dir.listFiles()) {
-            if (f.isFile() && f.getName().toLowerCase().endsWith(".kml")) {
-                f.delete();
-                System.out.println("Deleting " + f.getName());
-            }
-        }
-    }
+		if (config.getBooleanOption(Config.DEBUG_DISPLAY)) {
+			gp.setVisible(true);
+		}
+		boolean running = true;
+		int vListTimeout = Config.getInstance().getIntOption(
+				Config.VEHICLE_LIST_TIMEOUT);
+
+		System.out.println("Running...");
+
+		while (running) {
+			int now = timeToMinutes(new SimpleDateFormat("HH:mm:ss")
+					.format(new Date()));
+			Vehicle.cleanUp(vListTimeout);
+			droneQueue.check(now);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException ex) {
+				Logger.getLogger(WTBBackend.class.getName()).log(Level.SEVERE,
+						null, ex);
+			}
+			System.gc();
+			running = !droneQueue.isEmpty();
+		}
+	}
 }

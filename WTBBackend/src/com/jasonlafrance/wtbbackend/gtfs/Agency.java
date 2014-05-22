@@ -42,32 +42,6 @@ public final class Agency extends GTFSParser {
 	private String _bikes_policy_url = null;
 
 	/**
-	 * Create an Agency object with given values.
-	 * 
-	 * @param inID
-	 *            Agency ID
-	 * @param inName
-	 *            Agency name
-	 * @param inUrl
-	 *            Agency URL
-	 * @param inTimezone
-	 *            Agency time zone
-	 * @param inLang
-	 *            Agency language
-	 * @param inPhone
-	 *            Agency phone number
-	 */
-	public Agency(String inID, String inName, String inUrl, String inTimezone,
-			String inLang, String inPhone) {
-		_agency_id = inID;
-		_agency_name = inName;
-		_agency_url = inUrl;
-		_agency_timezone = inTimezone;
-		_agency_lang = inLang;
-		_agency_phone = inPhone;
-	}
-
-	/**
 	 * This is just a stub constructor
 	 * 
 	 * @param inLine
@@ -128,83 +102,111 @@ public final class Agency extends GTFSParser {
 	}
 
 	/**
-	 * Sets the ID
+	 * Create an Agency object with given values.
 	 * 
-	 * @param in
-	 *            New ID value.
+	 * @param inID
+	 *            Agency ID
+	 * @param inName
+	 *            Agency name
+	 * @param inUrl
+	 *            Agency URL
+	 * @param inTimezone
+	 *            Agency time zone
+	 * @param inLang
+	 *            Agency language
+	 * @param inPhone
+	 *            Agency phone number
 	 */
-	public void set_agency_id(String in) {
-		_agency_id = in;
+	public Agency(String inID, String inName, String inUrl, String inTimezone,
+			String inLang, String inPhone) {
+		_agency_id = inID;
+		_agency_name = inName;
+		_agency_url = inUrl;
+		_agency_timezone = inTimezone;
+		_agency_lang = inLang;
+		_agency_phone = inPhone;
 	}
 
 	/**
-	 * Sets the name
+	 * Get this agency's fare URL
 	 * 
-	 * @param in
-	 *            New name.
+	 * @return The agency fare URL
 	 */
-	public void set_agency_name(String in) {
-		_agency_name = in;
+	public String get_agency_fare_url() {
+		return _agency_fare_url;
 	}
 
 	/**
-	 * Sets the URL
+	 * Get this agency's ID
 	 * 
-	 * @param in
-	 *            New URL.
+	 * @return The agency ID
 	 */
-	public void set_agency_url(String in) {
-		_agency_url = in;
+	public String get_agency_id() {
+		return _agency_id;
 	}
 
 	/**
-	 * Sets the time zone
+	 * Get this agency's language
 	 * 
-	 * @param in
-	 *            New time zone.
+	 * @return The agency language
 	 */
-	public void set_agency_timezone(String in) {
-		_agency_timezone = in;
+	public String get_agency_lang() {
+		return _agency_lang;
 	}
 
 	/**
-	 * Sets the language
+	 * Get this agency's name
 	 * 
-	 * @param in
-	 *            New language.
+	 * @return The agency name.
 	 */
-	public void set_agency_lang(String in) {
-		_agency_lang = in;
+	public String get_agency_name() {
+		return _agency_name;
 	}
 
 	/**
-	 * Sets the phone number
+	 * Get this agency's phone number
 	 * 
-	 * @param in
-	 *            New phone number.
+	 * @return The agency phone number
 	 */
-	public void set_agency_phone(String in) {
-		_agency_phone = in;
+	public String get_agency_phone() {
+		return _agency_phone;
 	}
 
 	/**
-	 * Sets the fare URL
+	 * Get this agency's time zone
 	 * 
-	 * @param in
-	 *            New fare URL.
+	 * @return The agency time zone
 	 */
-	public void set_agency_fare_url(String in) {
-		_agency_fare_url = in;
+	public String get_agency_timezone() {
+		return _agency_timezone;
 	}
 
 	/**
-	 * Sets the bikes policy URL
+	 * Get this agency's URL
 	 * 
-	 * @param in
-	 *            New bikes policy URL
+	 * @return The agency URL
 	 */
-	public void set_bikes_policy_url(String in) {
-		_bikes_policy_url = in;
+	public String get_agency_url() {
+		return _agency_url;
+	}
+
+	/**
+	 * Get this agency's bikes policy URL
+	 * 
+	 * @return The agency bikes policy URL
+	 */
+	public String get_bikes_policy_url() {
+		return _bikes_policy_url;
+	}
+
+	/**
+	 * Get the GTFS file name associated with this object.
+	 * 
+	 * @return The GTFS file name associated with this object.
+	 */
+	@Override
+	public String getFilename() {
+		return _filename;
 	}
 
 	/**
@@ -218,75 +220,83 @@ public final class Agency extends GTFSParser {
 	}
 
 	/**
-	 * Get this agency's ID
+	 * Sets the fare URL
 	 * 
-	 * @return The agency ID
+	 * @param in
+	 *            New fare URL.
 	 */
-	public String get_agency_id() {
-		return _agency_id;
+	public void set_agency_fare_url(String in) {
+		_agency_fare_url = in;
 	}
 
 	/**
-	 * Get this agency's name
+	 * Sets the ID
 	 * 
-	 * @return The agency name.
+	 * @param in
+	 *            New ID value.
 	 */
-	public String get_agency_name() {
-		return _agency_name;
+	public void set_agency_id(String in) {
+		_agency_id = in;
 	}
 
 	/**
-	 * Get this agency's URL
+	 * Sets the language
 	 * 
-	 * @return The agency URL
+	 * @param in
+	 *            New language.
 	 */
-	public String get_agency_url() {
-		return _agency_url;
+	public void set_agency_lang(String in) {
+		_agency_lang = in;
 	}
 
 	/**
-	 * Get this agency's time zone
+	 * Sets the name
 	 * 
-	 * @return The agency time zone
+	 * @param in
+	 *            New name.
 	 */
-	public String get_agency_timezone() {
-		return _agency_timezone;
+	public void set_agency_name(String in) {
+		_agency_name = in;
 	}
 
 	/**
-	 * Get this agency's language
+	 * Sets the phone number
 	 * 
-	 * @return The agency language
+	 * @param in
+	 *            New phone number.
 	 */
-	public String get_agency_lang() {
-		return _agency_lang;
+	public void set_agency_phone(String in) {
+		_agency_phone = in;
 	}
 
 	/**
-	 * Get this agency's phone number
+	 * Sets the time zone
 	 * 
-	 * @return The agency phone number
+	 * @param in
+	 *            New time zone.
 	 */
-	public String get_agency_phone() {
-		return _agency_phone;
+	public void set_agency_timezone(String in) {
+		_agency_timezone = in;
 	}
 
 	/**
-	 * Get this agency's fare URL
+	 * Sets the URL
 	 * 
-	 * @return The agency fare URL
+	 * @param in
+	 *            New URL.
 	 */
-	public String get_agency_fare_url() {
-		return _agency_fare_url;
+	public void set_agency_url(String in) {
+		_agency_url = in;
 	}
 
 	/**
-	 * Get this agency's bikes policy URL
+	 * Sets the bikes policy URL
 	 * 
-	 * @return The agency bikes policy URL
+	 * @param in
+	 *            New bikes policy URL
 	 */
-	public String get_bikes_policy_url() {
-		return _bikes_policy_url;
+	public void set_bikes_policy_url(String in) {
+		_bikes_policy_url = in;
 	}
 
 	@Override
@@ -294,16 +304,6 @@ public final class Agency extends GTFSParser {
 		return _agency_id + "," + _agency_name + "," + _agency_url + ","
 				+ _agency_timezone + "," + _agency_lang + "," + _agency_phone
 				+ "\n";
-	}
-
-	/**
-	 * Get the GTFS file name associated with this object.
-	 * 
-	 * @return The GTFS file name associated with this object.
-	 */
-	@Override
-	public String getFilename() {
-		return _filename;
 	}
 
 }

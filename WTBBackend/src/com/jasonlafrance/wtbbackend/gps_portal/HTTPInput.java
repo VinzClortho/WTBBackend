@@ -93,6 +93,56 @@ public class HTTPInput implements Runnable {
 	}
 
 	/**
+	 * Builds an HTTP header.
+	 * 
+	 * @param code
+	 *            The return code to send back.
+	 * @param fileType
+	 *            File type to report to the client. Note really used much since
+	 *            we're mainly just transfering raw binary and text.
+	 * @return Returns a completed HTTP header.
+	 */
+	private String constructHttpHeader(int code, int fileType) {
+		String s = "HTTP/1.0 ";
+
+		switch (code) {
+		case 200:
+			s = s + "200 OK";
+			break;
+		case 400:
+			s = s + "400 Bad Request";
+			break;
+		case 403:
+			s = s + "403 Forbidden";
+			break;
+		case 404:
+			s = s + "404 Not Found";
+			break;
+		case 500:
+			s = s + "500 Internal Server Error";
+			break;
+		case 501:
+			s = s + "501 Not Implemented";
+			break;
+		}
+
+		s = s + "\r\n";
+		s = s + "Connection: close\r\n";
+		s = s + "Server: WTBBackend GPS Input\r\n"; // server name
+
+		switch (fileType) {
+		case 0:
+			break;
+		default:
+			s = s + "Content-Type: text/html\r\n";
+			break;
+		}
+
+		s = s + "\r\n";
+		return s;
+	}
+
+	/**
 	 * This is is HTTP input stream handler thread. It does the packet
 	 * decrypting, parsing, and vehicle updating.
 	 */
@@ -148,55 +198,18 @@ public class HTTPInput implements Runnable {
 	}
 
 	/**
-	 * Builds an HTTP header.
-	 * @param code The return code to send back.
-	 * @param fileType
-	 *            File type to report to the client. Note really used much since
-	 *            we're mainly just transfering raw binary and text.
-	 * @return Returns a completed HTTP header.
+	 * Set the cipher.
+	 * 
+	 * @param mCipher
+	 *            the mCipher to set
 	 */
-	private String constructHttpHeader(int code, int fileType) {
-		String s = "HTTP/1.0 ";
-
-		switch (code) {
-		case 200:
-			s = s + "200 OK";
-			break;
-		case 400:
-			s = s + "400 Bad Request";
-			break;
-		case 403:
-			s = s + "403 Forbidden";
-			break;
-		case 404:
-			s = s + "404 Not Found";
-			break;
-		case 500:
-			s = s + "500 Internal Server Error";
-			break;
-		case 501:
-			s = s + "501 Not Implemented";
-			break;
-		}
-
-		s = s + "\r\n";
-		s = s + "Connection: close\r\n";
-		s = s + "Server: WTBBackend GPS Input\r\n"; // server name
-
-		switch (fileType) {
-		case 0:
-			break;
-		default:
-			s = s + "Content-Type: text/html\r\n";
-			break;
-		}
-
-		s = s + "\r\n";
-		return s;
+	public void setmCipher(Cipher mCipher) {
+		this.mCipher = mCipher;
 	}
 
 	/**
 	 * Set the input reader.
+	 * 
 	 * @param mInput
 	 *            the mInput to set
 	 */
@@ -206,19 +219,11 @@ public class HTTPInput implements Runnable {
 
 	/**
 	 * Set the output stream.
+	 * 
 	 * @param mOutput
 	 *            the mOutput to set
 	 */
 	public void setmOutput(DataOutputStream mOutput) {
 		this.mOutput = mOutput;
-	}
-
-	/**
-	 * Set the cipher.
-	 * @param mCipher
-	 *            the mCipher to set
-	 */
-	public void setmCipher(Cipher mCipher) {
-		this.mCipher = mCipher;
 	}
 }

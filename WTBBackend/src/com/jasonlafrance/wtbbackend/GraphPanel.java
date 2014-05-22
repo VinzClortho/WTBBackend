@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend;
 
@@ -40,118 +40,123 @@ import com.jasonlafrance.wtbbackend.wtb_util.DebugWindow;
 import com.jasonlafrance.wtbbackend.wtb_util.Graph.Node;
 
 /**
- *
+ * 
  * @author Jason LaFrance
  */
 public class GraphPanel extends JPanel implements ActionListener {
 
-    private BufferedImage pathImage;
-    private final GraphFrame mParent;
-    private int xOffset = 0, yOffset = 0;
+	private BufferedImage pathImage;
+	private final GraphFrame mParent;
+	private int xOffset = 0, yOffset = 0;
 
-    public GraphPanel(GraphFrame inParent) {
-        pathImage = null;
-        mParent = inParent;
+	public GraphPanel(GraphFrame inParent) {
+		pathImage = null;
+		mParent = inParent;
 
-        Timer t = new Timer(1000, this);
-        t.start();
-    }
+		Timer t = new Timer(1000, this);
+		t.start();
+	}
 
-    public void setPathImage(BufferedImage inImage) {
-        pathImage = inImage;
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		mParent.repaint();
+	}
 
-    public void setXOffset(int in) {
-        xOffset = in;
-    }
+	@Override
+	public void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		int x, y;
 
-    public void setYOffset(int in) {
-        yOffset = in;
-    }
+		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-    @Override
-    public void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        int x, y;
+		if (pathImage != null && pathImage instanceof BufferedImage) {
+			g2d.drawImage(pathImage, xOffset, yOffset, this);
+		}
 
-        g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+		g2d.setColor(Color.white);
+		g2d.drawRect(0, 0, this.getWidth(), this.getHeight());
 
-        if (pathImage != null && pathImage instanceof BufferedImage) {
-            g2d.drawImage(pathImage, xOffset, yOffset, this);
-        }
+		int yy = 10;
+		String dataText = Vehicle.getVehicles().size() + " busses.";
+		g2d.drawString(dataText, 10, 10);
 
-        g2d.setColor(Color.white);
-        g2d.drawRect(0, 0, this.getWidth(), this.getHeight());
+		DebugWindow.getInstance().clearText();
+		for (Vehicle v : Vehicle.getVehicles()) {
+			// yy += 12;
+			// dataText = v.toString();
+			// g2d.drawString(dataText, 10, yy);
+			DebugWindow.getInstance().addText(v.toString());
+		}
 
-        int yy = 10;
-        String dataText = Vehicle.getVehicles().size() + " busses.";
-        g2d.drawString(dataText, 10, 10);
+		// get and draw the stops
+		ArrayList<StopAdapter> stops = GTFS.getCurrentStopWindow();
 
-        DebugWindow.getInstance().clearText();
-        for (Vehicle v : Vehicle.getVehicles()) {
-            //yy += 12;
-            //dataText = v.toString();
-            //g2d.drawString(dataText, 10, yy);
-            DebugWindow.getInstance().addText(v.toString());
-        }
+		HashSet<Node> stopSet = new HashSet<>();
 
-        // get and draw the stops
-        ArrayList<StopAdapter> stops = GTFS.getCurrentStopWindow();
+		for (StopAdapter s : stops) {
+			stopSet.add(new Node(s.getStop().get_stop_lat(), s.getStop()
+					.get_stop_lon()));
 
-        HashSet<Node> stopSet = new HashSet<>();
+			x = mParent.mapXToView(s.getStop().get_stop_lon()) + xOffset;
+			y = mParent.mapYToView(s.getStop().get_stop_lat()) + yOffset;
 
-        for (StopAdapter s : stops) {
-            stopSet.add(new Node(s.getStop().get_stop_lat(), s.getStop().get_stop_lon()));
-            
-            x = mParent.mapXToView(s.getStop().get_stop_lon()) + xOffset;
-            y = mParent.mapYToView(s.getStop().get_stop_lat()) + yOffset;
+			if (GraphFrame.getStopInfoVisible()
+					&& (s.getStopTime() != null && (s.getStopTime()
+							.get_timepoint() != null
+							&& s.getStopTime().get_timepoint().equals("1") || (s
+							.getStopTime().get_timepoint() != null
+							&& !s.getStopTime().get_timepoint().equals("1") && s
+							.getStopTime().getArrivalTimecode() > 0)))) {
+				String output = s.getStop().getGTFS_ID() + "-"
+						+ s.getRoute().getName();
+				output += " " + s.getStop().get_stop_name() + "";
+				output += ": " + s.getStopTime().get_arrival_time();
+				g2d.drawString(output, x + 2, y - 2);
+			}
+		}
 
-            if (GraphFrame.getStopInfoVisible()
-                    && (s.getStopTime() != null
-                    && (s.getStopTime().get_timepoint() != null && s.getStopTime().get_timepoint().equals("1")
-                    || (s.getStopTime().get_timepoint() != null && !s.getStopTime().get_timepoint().equals("1") && s.getStopTime().getArrivalTimecode() > 0)))) {
-                String output = s.getStop().getGTFS_ID() + "-" + s.getRoute().getName();
-                output += " " + s.getStop().get_stop_name() + "";
-                output += ": " + s.getStopTime().get_arrival_time();
-                g2d.drawString(output, x + 2, y - 2);
-            }
-        }
+		// g2d.setFont( new Font("SansSerif", Font.BOLD, 8));
+		for (Node s : stopSet.toArray(new Node[stopSet.size()])) {
+			x = mParent.mapXToView(s.getLon()) + xOffset;
+			y = mParent.mapYToView(s.getLat()) + yOffset;
+			g2d.setColor(Color.green);
+			g2d.fillOval(x - 2, y - 2, 5, 5);
+			g2d.setColor(Color.white);
+			g2d.drawOval(x - 2, y - 2, 5, 5);
+			g2d.setColor(Color.gray);
 
-        //g2d.setFont( new Font("SansSerif", Font.BOLD, 8));
-        for (Node s : stopSet.toArray(new Node[stopSet.size()])) {
-            x = mParent.mapXToView(s.getLon()) + xOffset;
-            y = mParent.mapYToView(s.getLat()) + yOffset;
-            g2d.setColor(Color.green);
-            g2d.fillOval(x - 2, y - 2, 5, 5);
-            g2d.setColor(Color.white);
-            g2d.drawOval(x - 2, y - 2, 5, 5);
-            g2d.setColor(Color.gray);
+		}
 
-        }
+		ListIterator li = Vehicle.getVehicles().listIterator();
 
-        ListIterator li = Vehicle.getVehicles().listIterator();
+		g2d.setFont(new Font("SansSerif", Font.PLAIN, 10));
 
-        g2d.setFont(new Font("SansSerif", Font.PLAIN, 10));
+		while (li.hasNext()) {
+			Vehicle v = (Vehicle) li.next();
+			if (v.isReady()) {
+				x = mParent.mapXToView(v.getLon()) + xOffset;
+				y = mParent.mapYToView(v.getLat()) + yOffset;
+				g2d.setColor(Color.red);
+				g2d.fillOval(x - 4, y - 4, 9, 9);
+				g2d.setColor(Color.black);
+				g2d.drawOval(x - 4, y - 4, 9, 9);
+				g2d.setColor(Color.white);
+				g2d.drawString(Integer.toString(v.getID()), x + 3, y - 3);
+			}
+		}
+	}
 
-        while (li.hasNext()) {
-            Vehicle v = (Vehicle) li.next();
-            if (v.isReady()) {
-                x = mParent.mapXToView(v.getLon()) + xOffset;
-                y = mParent.mapYToView(v.getLat()) + yOffset;
-                g2d.setColor(Color.red);
-                g2d.fillOval(x - 4, y - 4, 9, 9);
-                g2d.setColor(Color.black);
-                g2d.drawOval(x - 4, y - 4, 9, 9);
-                g2d.setColor(Color.white);
-                g2d.drawString(Integer.toString(v.getID()), x + 3, y - 3);
-            }
-        }
-    }
+	public void setPathImage(BufferedImage inImage) {
+		pathImage = inImage;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        mParent.repaint();
-    }
+	public void setXOffset(int in) {
+		xOffset = in;
+	}
+
+	public void setYOffset(int in) {
+		yOffset = in;
+	}
 
 }
