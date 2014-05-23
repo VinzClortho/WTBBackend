@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.gtfs;
 
@@ -26,231 +26,455 @@ import java.util.ArrayList;
 import com.jasonlafrance.wtbbackend.wtb_util.CSVParser;
 
 /**
- *
+ * GTFS Vertex (shapes) class.
+ * 
  * @author Jason LaFrance
  */
 public final class Vertex extends GTFSParser {
 
-    private static final String _filename = "//shapes.txt";
+	private static final String _filename = "//shapes.txt";
 
-    private String _shape_id = null;
-    private double _shape_pt_lat = 0.0, _shape_pt_lon = 0.0;
-    private int _shape_pt_sequence = -1;
-    private double _shape_dist_traveled = 0.0;
+	/**
+	 * Generate a hashcode for a given longitude and latitude
+	 * 
+	 * @param lat
+	 *            Latitude
+	 * @param lon
+	 *            Longitude
+	 * @return The hashcode
+	 */
+	private static int genHashCode(double lat, double lon) {
+		return (int) (Double.doubleToRawLongBits(lat) * 31 + Double
+				.doubleToRawLongBits(lon));
+	}
 
-    private int mHashCode = 0;
+	private String _shape_id = null;
+	private double _shape_pt_lat = 0.0, _shape_pt_lon = 0.0;
+	private int _shape_pt_sequence = -1;
 
-    private StopAdapter _stop = null;
+	private double _shape_dist_traveled = 0.0;
 
-    public Vertex() {;
-    }
+	private Integer mHashCode = null;
 
-    public Vertex(double inLat, double inLon) {
-        this("", inLat, inLon, -1, 0.0);
-    }
+	private StopAdapter _stop = null;
 
-    public Vertex(
-            String inID,
-            double inLat,
-            double inLon,
-            int inSequence,
-            double inDist) {
-        _shape_id = inID;
-        _shape_pt_lat = inLat;
-        _shape_pt_lon = inLon;
-        _shape_pt_sequence = inSequence;
-        _shape_dist_traveled = inDist;
-        mHashCode = genHashCode(inLat, inLon);
-    }
+	/**
+	 * Stub constructor
+	 */
+	public Vertex() {
+	}
 
-    public Vertex(String inLine) {
-    }
+	/**
+	 * Create a Vertex object from given longitude and latitude
+	 * 
+	 * @param inLat
+	 *            Latidude
+	 * @param inLon
+	 *            Longitude
+	 */
+	public Vertex(double inLat, double inLon) {
+		this("", inLat, inLon, -1, 0.0);
+	}
 
-    public Vertex(String inLine, int id) {
-        ArrayList<String> h = _headers.get(id).get(_filename);
-        String[] f = CSVParser.parseLine(inLine);
-        if (f.length != h.size()) {
-            return;
-        }
+	/**
+	 * Stub constructor
+	 * 
+	 * @param inLine
+	 */
+	public Vertex(String inLine) {
+	}
 
-        for (int i = 0; i < f.length; i++) {
-            switch (h.get(i)) {
-                case "shape_dist_traveled":
-                    set_shape_dist_traveled(f[i]);
-                    break;
-                case "shape_id":
-                    set_shape_id(f[i]);
-                    break;
-                case "shape_pt_lat":
-                    set_shape_pt_lat(f[i]);
-                    break;
-                case "shape_pt_lon":
-                    set_shape_pt_lon(f[i]);
-                    break;
-                case "shape_pt_sequence":
-                    set_shape_pt_sequence(f[i]);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+	/**
+	 * Create a Vertex object from given values
+	 * 
+	 * @param inID
+	 *            Shape ID
+	 * @param inLat
+	 *            Latitude
+	 * @param inLon
+	 *            Longitude
+	 * @param inSequence
+	 *            Sequence in shape
+	 * @param inDist
+	 *            Distance traveled in shape
+	 */
+	public Vertex(String inID, double inLat, double inLon, int inSequence,
+			double inDist) {
+		_shape_id = inID;
+		_shape_pt_lat = inLat;
+		_shape_pt_lon = inLon;
+		_shape_pt_sequence = inSequence;
+		_shape_dist_traveled = inDist;
 
-    private static int genHashCode(double lat, double lon) {
-        return (int) (Double.doubleToRawLongBits(lat) * 31 + Double.doubleToRawLongBits(lon));
-    }
+	}
 
-    public int hashCode() {
-        return mHashCode;
-    }
+	/**
+	 * Create a Vertex object with a supplied line from a GTFS shapes.txt table.
+	 * 
+	 * @param inLine
+	 *            Line from a GTFS shapes.txt table.
+	 * @param id
+	 *            The GTFS ID from the GTFS multition that this object belongs
+	 *            to.
+	 */
+	public Vertex(String inLine, int id) {
+		ArrayList<String> h = _headers.get(id).get(_filename);
+		String[] f = CSVParser.parseLine(inLine);
+		if (f.length != h.size()) {
+			return;
+		}
 
-    public boolean equals(Vertex in) {
-        if (in == null) {
-            return false;
-        }
-        if (_shape_pt_lat == in.get_shape_pt_lat()
-                && _shape_pt_lon == in.get_shape_pt_lon()) {
-            return true;
-        }
-        return false;
-    }
+		for (int i = 0; i < f.length; i++) {
+			switch (h.get(i)) {
+			case "shape_dist_traveled":
+				set_shape_dist_traveled(f[i]);
+				break;
+			case "shape_id":
+				set_shape_id(f[i]);
+				break;
+			case "shape_pt_lat":
+				set_shape_pt_lat(f[i]);
+				break;
+			case "shape_pt_lon":
+				set_shape_pt_lon(f[i]);
+				break;
+			case "shape_pt_sequence":
+				set_shape_pt_sequence(f[i]);
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
-    public void set_shape_id(String in) {
-        _shape_id = in;
-    }
+	public boolean equals(Vertex in) {
+		if (in == null) {
+			return false;
+		}
+		if (_shape_pt_lat == in.get_shape_pt_lat()
+				&& _shape_pt_lon == in.get_shape_pt_lon()) {
+			return true;
+		}
+		return false;
+	}
 
-    public void setCoordinates(double inLat, double inLon) {
-        _shape_pt_lat = inLat;
-        _shape_pt_lon = inLon;
-        mHashCode = genHashCode(inLat, inLon);
-    }
+	/**
+	 * Get distance traveled
+	 * 
+	 * @return Distance traveled
+	 */
+	public double get_shape_dist_traveled() {
+		return _shape_dist_traveled;
+	}
 
-    public void set_shape_pt_lat(double in) {
-        _shape_pt_lat = in;
-        mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
-    }
+	/**
+	 * Get the shape ID
+	 * 
+	 * @return Shape ID
+	 */
+	public String get_shape_id() {
+		return _shape_id;
+	}
 
-    public void set_shape_pt_lat(String in) {
-        try {
-            _shape_pt_lat = Double.parseDouble(in);
-            mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get latitude
+	 * 
+	 * @return Latitude
+	 */
+	public double get_shape_pt_lat() {
+		return _shape_pt_lat;
+	}
 
-    public void set_shape_pt_lon(double in) {
-        _shape_pt_lon = in;
-        mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
-    }
+	/**
+	 * Get longitude
+	 * 
+	 * @return Longitude
+	 */
+	public double get_shape_pt_lon() {
+		return _shape_pt_lon;
+	}
 
-    public void set_shape_pt_lon(String in) {
-        try {
-            _shape_pt_lon = Double.parseDouble(in);
-            mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get vertex's sequence order in the shape
+	 * 
+	 * @return Sequence order
+	 */
+	public int get_shape_pt_sequence() {
+		return _shape_pt_sequence;
+	}
 
-    public void set_shape_pt_sequence(int in) {
-        _shape_pt_sequence = in;
-    }
+	/**
+	 * Get distance from this Vertex to another Vertex
+	 * 
+	 * @param in
+	 *            Vertex to get distance to
+	 * @return Distance between vertices
+	 */
+	public double getDistance(Vertex in) {
+		return Math.sqrt(Math.pow(_shape_pt_lat - in.get_shape_pt_lat(), 2.0)
+				+ Math.pow(_shape_pt_lon - in.get_shape_pt_lon(), 2.0));
+	}
 
-    public void set_shape_pt_sequence(String in) {
-        try {
-            _shape_pt_sequence = Integer.parseInt(in);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get distance in meters from this Vertex to a given set of coordinates
+	 * 
+	 * @param inLat
+	 *            Latitude to ...
+	 * @param inLon
+	 *            Longitude to...
+	 * @return Distance between this Vertex and given coordinates
+	 */
+	public double getDistanceInMeters(double inLat, double inLon) {
+		return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc
+				.getDistanceInMeters(_shape_pt_lat, _shape_pt_lon, inLat, inLon);
+	}
 
-    public void set_shape_dist_traveled(double in) {
-        _shape_dist_traveled = in;
-    }
+	/**
+	 * Get distance in meters from this Vertex to a given Vertex
+	 * 
+	 * @param in
+	 *            Vertex to get distance to
+	 * @return Distance between this Vertex and given Vertex
+	 */
+	public double getDistanceInMeters(Vertex in) {
+		return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc
+				.getDistanceInMeters(_shape_pt_lat, _shape_pt_lon,
+						in.get_shape_pt_lat(), in.get_shape_pt_lon());
+	}
 
-    public void set_shape_dist_traveled(String in) {
-        try {
-            _shape_dist_traveled = Double.parseDouble(in);
-        } catch (NumberFormatException e) {;
-        }
-    }
+	/**
+	 * Get the GTFS file name associated with this object.
+	 * 
+	 * @return The GTFS file name associated with this object.
+	 */
+	@Override
+	public String getFilename() {
+		return _filename;
+	}
 
-    public void setStop(StopAdapter in) {
-        _stop = in;
-    }
+	/**
+	 * Get this objects unique ID.
+	 * 
+	 * @return This objects unique ID
+	 */
+	@Override
+	public int getID() {
+		return _shape_id.hashCode();
+	}
 
-    public String get_shape_id() {
-        return _shape_id;
-    }
+	/**
+	 * Get squared distance to another Vertex
+	 * 
+	 * @param in
+	 *            Vertex to get squared distance to
+	 * @return Squared distance between vertices
+	 */
+	public double getRawDistance(Vertex in) {
+		double dLat = _shape_pt_lat - in.get_shape_pt_lat();
+		double dLon = _shape_pt_lon - in.get_shape_pt_lon();
+		return (dLat * dLat) + (dLon * dLon);
+	}
 
-    @Override
-    public int getID() {
-        return _shape_id.hashCode();
-    }
+	/**
+	 * Get squared distance to a set of coordinates
+	 * 
+	 * @param inLat
+	 *            Latitude
+	 * @param inLon
+	 *            Longitude
+	 * @return The squared distance between here and there
+	 */
+	public double getRawDistanceInMeters(double inLat, double inLon) {
+		return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc
+				.getRawDistanceInMeters(_shape_pt_lat, _shape_pt_lon, inLat,
+						inLon);
+	}
 
-    public double get_shape_pt_lat() {
-        return _shape_pt_lat;
-    }
+	/**
+	 * Get squared distance to another Vertex
+	 * 
+	 * @param in
+	 *            Vertex to get squared distance to
+	 * @return The distance between vertices
+	 */
+	public double getRawDistanceInMeters(Vertex in) {
+		return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc
+				.getRawDistanceInMeters(_shape_pt_lat, _shape_pt_lon,
+						in.get_shape_pt_lat(), in.get_shape_pt_lon());
+	}
 
-    public double get_shape_pt_lon() {
-        return _shape_pt_lon;
-    }
+	/**
+	 * Get stop associated with this Vertex, if any
+	 * 
+	 * @return Associated Stop wrapped in a StopAdapter, or null
+	 */
+	public StopAdapter getStop() {
+		return _stop;
+	}
 
-    public int get_shape_pt_sequence() {
-        return _shape_pt_sequence;
-    }
+	@Override
+	public int hashCode() {
+		// Lazy initialize the hashcode...
+		if (mHashCode == null)
+			mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
+		return mHashCode;
+	}
 
-    public double get_shape_dist_traveled() {
-        return _shape_dist_traveled;
-    }
+	/**
+	 * Check if there is a Stop associated with this Vertex
+	 * 
+	 * @return If a stop is associated...
+	 */
+	public boolean isStop() {
+		return _stop instanceof StopAdapter;
+	}
 
-    public StopAdapter getStop() {
-        return _stop;
-    }
+	/**
+	 * Set distance traveled
+	 * 
+	 * @param in
+	 *            Distance traveled
+	 */
+	public void set_shape_dist_traveled(double in) {
+		_shape_dist_traveled = in;
+	}
 
-    public boolean isStop() {
-        return _stop instanceof StopAdapter;
-    }
+	/**
+	 * Set distance traveled
+	 * 
+	 * @param in
+	 *            Distance traveled
+	 */
+	public void set_shape_dist_traveled(String in) {
+		try {
+			_shape_dist_traveled = Double.parseDouble(in);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    public double getDistance(Vertex in) {
-        return Math.sqrt(Math.pow(_shape_pt_lat - in.get_shape_pt_lat(), 2.0) + Math.pow(_shape_pt_lon - in.get_shape_pt_lon(), 2.0));
-    }
+	/**
+	 * Set shape ID
+	 * 
+	 * @param in
+	 *            Shape ID
+	 */
+	public void set_shape_id(String in) {
+		_shape_id = in;
+	}
 
-    public double getRawDistance(Vertex in) {
-        double dLat = _shape_pt_lat - in.get_shape_pt_lat();
-        double dLon = _shape_pt_lon - in.get_shape_pt_lon();
-        return (dLat * dLat) + (dLon * dLon);
-    }
+	/**
+	 * Set latitude
+	 * 
+	 * @param in
+	 *            Latitude
+	 */
+	public void set_shape_pt_lat(double in) {
+		_shape_pt_lat = in;
+		mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
+	}
 
-    public double getRawDistanceInMeters(Vertex in) {
-        return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc.getRawDistanceInMeters(_shape_pt_lat, _shape_pt_lon, in.get_shape_pt_lat(), in.get_shape_pt_lon());
-    }
+	/**
+	 * Set latitude
+	 * 
+	 * @param in
+	 *            Latitude
+	 */
+	public void set_shape_pt_lat(String in) {
+		try {
+			_shape_pt_lat = Double.parseDouble(in);
+			mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    public double getRawDistanceInMeters(double inLat, double inLon) {
-        return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc.getRawDistanceInMeters(_shape_pt_lat, _shape_pt_lon, inLat, inLon);
-    }
+	/**
+	 * Set longitude
+	 * 
+	 * @param in
+	 *            Longitude
+	 */
+	public void set_shape_pt_lon(double in) {
+		_shape_pt_lon = in;
+		mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
+	}
 
-    public double getDistanceInMeters(Vertex in) {
-        return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc.getDistanceInMeters(_shape_pt_lat, _shape_pt_lon, in.get_shape_pt_lat(), in.get_shape_pt_lon());
-    }
+	/**
+	 * Set longitude
+	 * 
+	 * @param in
+	 *            Longitude
+	 */
+	public void set_shape_pt_lon(String in) {
+		try {
+			_shape_pt_lon = Double.parseDouble(in);
+			mHashCode = genHashCode(_shape_pt_lat, _shape_pt_lon);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    public double getDistanceInMeters(double inLat, double inLon) {
-        return com.jasonlafrance.wtbbackend.wtb_util.GPSCalc.getDistanceInMeters(_shape_pt_lat, _shape_pt_lon, inLat, inLon);
-    }
+	/**
+	 * Set vertex sequence in shape
+	 * 
+	 * @param in
+	 *            Sequence
+	 */
+	public void set_shape_pt_sequence(int in) {
+		_shape_pt_sequence = in;
+	}
 
-    @Override
-    public String toString() {
-        return _shape_id + ","
-                + _shape_pt_lat + ","
-                + _shape_pt_lon + ","
-                + _shape_pt_sequence + ","
-                + _shape_dist_traveled;
-    }
+	/**
+	 * Set vertex sequence in shape
+	 * 
+	 * @param in
+	 *            Sequence
+	 */
+	public void set_shape_pt_sequence(String in) {
+		try {
+			_shape_pt_sequence = Integer.parseInt(in);
+		} catch (NumberFormatException e) {
+			;
+		}
+	}
 
-    public String toKMLLine() {
-        return _shape_pt_lon + "," + _shape_pt_lat + ",0\n";
-    }
+	/**
+	 * Set Vertex coordinates
+	 * 
+	 * @param inLat
+	 *            Latitude
+	 * @param inLon
+	 *            Longitude
+	 */
+	public void setCoordinates(double inLat, double inLon) {
+		_shape_pt_lat = inLat;
+		_shape_pt_lon = inLon;
+		mHashCode = genHashCode(inLat, inLon);
+	}
 
-    @Override
-    public String getFilename() {
-        return _filename;
-    }
+	/**
+	 * Associate a Stop with this Vertex
+	 * 
+	 * @param in
+	 *            A Stop wrapped in a StopAdapter
+	 */
+	public void setStop(StopAdapter in) {
+		_stop = in;
+	}
+
+	/**
+	 * Get a KML line representing this Vertex
+	 * 
+	 * @return KML line
+	 */
+	public String toKMLLine() {
+		return _shape_pt_lon + "," + _shape_pt_lat + ",0\n";
+	}
+
+	@Override
+	public String toString() {
+		return _shape_id + "," + _shape_pt_lat + "," + _shape_pt_lon + ","
+				+ _shape_pt_sequence + "," + _shape_dist_traveled;
+	}
 }
