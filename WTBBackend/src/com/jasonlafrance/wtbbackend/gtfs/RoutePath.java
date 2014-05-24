@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.gtfs;
 
@@ -27,202 +27,313 @@ import com.jasonlafrance.wtbbackend.config.Config;
 import com.jasonlafrance.wtbbackend.wtb_util.CSVParser;
 
 /**
- *
+ * RoutePath class for managing directed Stop lists for routes
+ * 
  * @author Jason LaFrance
  */
 public class RoutePath {
 
-    private static int sNextID = 0;
-    private static final HashMap<Integer, RoutePath> sRoutePathMap = new HashMap<>();
+	private static int sNextID = 0;
+	private static final HashMap<Integer, RoutePath> sRoutePathMap = new HashMap<>();
 
-    public static RoutePath getRoutePath(int id) {
-        return sRoutePathMap.get(id);
-    }
+	/**
+	 * Get a RoutePath from the multition by ID
+	 * 
+	 * @param id
+	 *            The ID of the RoutePath to get
+	 * @return The requested RoutePath, or null if doesn't exist
+	 */
+	public static RoutePath getRoutePath(int id) {
+		return sRoutePathMap.get(id);
+	}
 
-    private final int mID;
-    private final ArrayList<Trip> mPath;
-    private final Route mRoute;
-    private final ArrayList<StopAdapter> mStops = new ArrayList<>();
-    private final ArrayList<StopAdapter> mStopsWithTimes = new ArrayList<>();
+	private final int mID;
+	private final ArrayList<Trip> mPath;
+	private final Route mRoute;
+	private final ArrayList<StopAdapter> mStops = new ArrayList<>();
+	private final ArrayList<StopAdapter> mStopsWithTimes = new ArrayList<>();
 
-    private String mStartTime, mEndTime;
-    private int mStartTimecode, mEndTimecode;
+	private String mStartTime, mEndTime;
+	private int mStartTimecode, mEndTimecode;
 
-    private final double closenessThreshold = Config.get().getDoubleOption(Config.CLOSENESS_THRESHOLD); // in meters
+	private final double closenessThreshold = Config.getInstance()
+			.getDoubleOption(Config.CLOSENESS_THRESHOLD); // in meters
 
-    public RoutePath(ArrayList<Trip> inPath, Route inRoute) {
-        mID = sNextID;
-        sNextID++;
-        sRoutePathMap.put(mID, this);
+	/**
+	 * Construct a RoutePath object from given data
+	 * 
+	 * @param inPath
+	 *            List of Trips to build path from
+	 * @param inRoute
+	 *            Route to associate path to
+	 */
+	public RoutePath(ArrayList<Trip> inPath, Route inRoute) {
+		mID = sNextID;
+		sNextID++;
+		sRoutePathMap.put(mID, this);
 
-        mPath = inPath;
-        mRoute = inRoute;
-        mStartTimecode = -1;
-        mEndTimecode = Integer.MIN_VALUE;
+		mPath = inPath;
+		mRoute = inRoute;
+		mStartTimecode = -1;
+		mEndTimecode = Integer.MIN_VALUE;
 
-        buildStopList();
-    }
+		buildStopList();
+	}
 
-    public RoutePath(String inLine, HashMap<String, Trip> tripMap) {
-        mID = sNextID;
-        sNextID++;
-        sRoutePathMap.put(mID, this);
+	/**
+	 * Construct a RoutePath from a stored CSV String and a HashMap of Trips and
+	 * their IDs
+	 * 
+	 * @param inLine
+	 *            The raw CSV String
+	 * @param tripMap
+	 *            The TripMap HashSet
+	 */
+	public RoutePath(String inLine, HashMap<String, Trip> tripMap) {
+		mID = sNextID;
+		sNextID++;
+		sRoutePathMap.put(mID, this);
 
-        mPath = new ArrayList<>();
+		mPath = new ArrayList<>();
 
-        String[] f = CSVParser.parseLine(inLine);
-        for (String s : f) {
-            s = s.replaceAll("\"", "");
-            if (tripMap.get(s) != null) {
-                mPath.add(tripMap.get(s));
-            }
-        }
+		String[] f = CSVParser.parseLine(inLine);
+		for (String s : f) {
+			s = s.replaceAll("\"", "");
+			if (tripMap.get(s) != null) {
+				mPath.add(tripMap.get(s));
+			}
+		}
 
-        if (mPath.size() > 0) {
-            mRoute = mPath.get(0).getRoute();
-        } else {
-            mRoute = null;
-        }
-        
-        mStartTimecode = -1;
-        mEndTimecode = Integer.MIN_VALUE;
-        
-        buildStopList();
-    }
+		if (mPath.size() > 0) {
+			mRoute = mPath.get(0).getRoute();
+		} else {
+			mRoute = null;
+		}
 
-    public String getCSVTripList() {
-        String ret = "";
-        for (int i = 0; i < mPath.size() - 1; i++) {
-            ret += '"' + mPath.get(i).get_trip_id() + '"' + ',';
-        }
-        if (mPath.size() > 0) {
-            ret += '"' + mPath.get(mPath.size() - 1).get_trip_id() + '"' + "\r\n";
-        }
-        return ret;
-    }
+		mStartTimecode = -1;
+		mEndTimecode = Integer.MIN_VALUE;
 
-    private void buildStopList() {
-        for (Trip t : mPath) {
-            mStops.addAll(t.getStops());
-        }
+		buildStopList();
+	}
 
-        StopAdapter prevStop = null;
-        for (int i = 0; i < mStops.size(); i++) {
-            StopAdapter s = mStops.get(i);
+	/**
+	 * Build a list of stops from the stored data
+	 */
+	private void buildStopList() {
+		for (Trip t : mPath) {
+			mStops.addAll(t.getStops());
+		}
 
-            if (s.getStopTime() instanceof StopTime) {
-                if (mStartTimecode <= 0 && s.getStopTime().getArrivalTimecode() > 0) {
-                    mStartTime = s.getStopTime().get_arrival_time();
-                    mStartTimecode = s.getStopTime().getArrivalTimecode();
-                }
-                if (s.getStopTime().getDepartureTimecode() > 0 && s.getStopTime().getDepartureTimecode() > mEndTimecode) {
-                    mEndTime = s.getStopTime().get_departure_time();
-                    mEndTimecode = s.getStopTime().getDepartureTimecode();
-                }
+		StopAdapter prevStop = null;
+		for (int i = 0; i < mStops.size(); i++) {
+			StopAdapter s = mStops.get(i);
 
-            }
+			if (s.getStopTime() instanceof StopTime) {
+				if (mStartTimecode <= 0
+						&& s.getStopTime().getArrivalTimecode() > 0) {
+					mStartTime = s.getStopTime().get_arrival_time();
+					mStartTimecode = s.getStopTime().getArrivalTimecode();
+				}
+				if (s.getStopTime().getDepartureTimecode() > 0
+						&& s.getStopTime().getDepartureTimecode() > mEndTimecode) {
+					mEndTime = s.getStopTime().get_departure_time();
+					mEndTimecode = s.getStopTime().getDepartureTimecode();
+				}
 
-            if (s.getStopTime() != null) {
-                mStopsWithTimes.add(s);
-            }
-            if (prevStop != null) {
-                prevStop.setNextStop(s);
-            }
-            prevStop = s;
-        }
-    }
+			}
 
-    public int getRouteID() {
-        return mRoute.getID();
-    }
-    
-    public String getRouteName(){
-        return mRoute.getName();
-    }
+			if (s.getStopTime() != null) {
+				mStopsWithTimes.add(s);
+			}
+			if (prevStop != null) {
+				prevStop.setNextStop(s);
+			}
+			prevStop = s;
+		}
+	}
 
-    public String getRouteShortName() {
-        return mRoute.getName();
-    }
+	/**
+	 * Get the route color
+	 * 
+	 * @return The route color
+	 */
+	public String getColor() {
+		return mRoute.get_route_color();
+	}
 
-    public String getColor() {
-        return mRoute.get_route_color();
-    }
+	/**
+	 * Generate a CSV String from the stored trip list
+	 * 
+	 * @return A CSV String of the trip list
+	 */
+	public String getCSVTripList() {
+		String ret = "";
+		for (int i = 0; i < mPath.size() - 1; i++) {
+			ret += '"' + mPath.get(i).get_trip_id() + '"' + ',';
+		}
+		if (mPath.size() > 0) {
+			ret += '"' + mPath.get(mPath.size() - 1).get_trip_id() + '"'
+					+ "\r\n";
+		}
+		return ret;
+	}
 
-    public String getRouteLongName() {
-        return mRoute.get_route_long_name();
-    }
+	/**
+	 * Get the overall end time
+	 * 
+	 * @return End time
+	 */
+	public String getEndTime() {
+		return mEndTime;
+	}
 
-    public String getServiceID() {
-        return mPath.get(0).get_service_id();
-    }
+	/**
+	 * Get the overall end time code
+	 * 
+	 * @return End time code
+	 */
+	public int getEndTimecode() {
+		return mEndTimecode;
+	}
 
-    public ArrayList<StopAdapter> getStops() {
-        return mStops;
-    }
+	/**
+	 * Get a list of Trips for the overall path
+	 * 
+	 * @return List of Trips in the path
+	 */
+	public ArrayList<Trip> getPath() {
+		return mPath;
+	}
 
-    public ArrayList<StopAdapter> getStopsWithTimes() {
-        return mStopsWithTimes;
-    }
+	/**
+	 * Get the associated route ID
+	 * 
+	 * @return The Route ID
+	 */
+	public int getRouteID() {
+		return mRoute.getID();
+	}
 
-    public String getStartTime() {
-        return mStartTime;
-    }
+	/**
+	 * Get the long name
+	 * 
+	 * @return The lone name
+	 */
+	public String getRouteLongName() {
+		return mRoute.get_route_long_name();
+	}
 
-    public String getEndTime() {
-        return mEndTime;
-    }
+	/**
+	 * Get the route name
+	 * 
+	 * @return The route name
+	 */
+	public String getRouteName() {
+		return mRoute.getName();
+	}
 
-    public int getStartTimecode() {
-        return mStartTimecode;
-    }
+	/**
+	 * Get the route short name
+	 * 
+	 * @return The short name
+	 */
+	public String getRouteShortName() {
+		return mRoute.getName();
+	}
 
-    public int getEndTimecode() {
-        return mEndTimecode;
-    }
+	/**
+	 * Get the service ID
+	 * 
+	 * @return Service ID
+	 */
+	public String getServiceID() {
+		return mPath.get(0).get_service_id();
+	}
 
-    public ArrayList<Trip> getPath() {
-        return mPath;
-    }
+	/**
+	 * Get the start time
+	 * 
+	 * @return The start time
+	 */
+	public String getStartTime() {
+		return mStartTime;
+	}
 
-    public boolean sameStops(RoutePath b) {
-        boolean same = true;
+	/**
+	 * Get the start time code
+	 * 
+	 * @return Start time code
+	 */
+	public int getStartTimecode() {
+		return mStartTimecode;
+	}
 
-        ListIterator aLi = mStops.listIterator();
-        ListIterator bLi = b.getStops().listIterator();
+	/**
+	 * Get the list of Stops in this path
+	 * 
+	 * @return A list if Stops wrapped in StopAdapters
+	 */
+	public ArrayList<StopAdapter> getStops() {
+		return mStops;
+	}
 
-        while (aLi.hasNext() && bLi.hasNext()) {
-            Stop aS = (Stop) aLi.next();
-            Stop bS = (Stop) bLi.next();
-            System.out.println(aS.getID() + " -> " + bS.getID() + "   distance: " + aS.getVertex().getDistanceInMeters(bS.getVertex()));
-            if (aS.getID() != bS.getID() && aS.getVertex().getDistanceInMeters(bS.getVertex()) > closenessThreshold) {
-                same = false;
-                break;
-            }
-        }
+	/**
+	 * Get an in-order list of just the stops with scheduled times
+	 * 
+	 * @return A list of Stops wrapped in StopAdapters
+	 */
+	public ArrayList<StopAdapter> getStopsWithTimes() {
+		return mStopsWithTimes;
+	}
 
-        if (same && (aLi.hasNext() || bLi.hasNext())) {
-            System.out.println("Stops left!");
-            same = false;
-        }
+	/**
+	 * Check if this RoutePath shares all of the same stops in the same order as
+	 * another RoutePath
+	 * 
+	 * @param b
+	 *            The RoutePath to check against
+	 * @return True if they match, otherwise false
+	 */
+	public boolean sameStops(RoutePath b) {
+		boolean same = true;
 
-        return same;
-    }
+		ListIterator aLi = mStops.listIterator();
+		ListIterator bLi = b.getStops().listIterator();
 
-    @Override
-    public String toString() {
-        int vertices = 0;
-        String tripsList = "";
-        for (Trip t : mPath) {
-            vertices += t.getVertices().size() - 1;
-            tripsList += t.get_trip_id() + " ";
-        }
-        String ret = "Route: " + mRoute.getName()
-                + "   Service: " + mPath.get(0).get_service_id()
-                + "   StartTime: " + mStartTime
-                + "   EndTime: " + mEndTime
-                + "   Points in path: " + vertices
-                + "   Trips: " + tripsList;
+		while (aLi.hasNext() && bLi.hasNext()) {
+			Stop aS = (Stop) aLi.next();
+			Stop bS = (Stop) bLi.next();
+			System.out.println(aS.getID() + " -> " + bS.getID()
+					+ "   distance: "
+					+ aS.getVertex().getDistanceInMeters(bS.getVertex()));
+			if (aS.getID() != bS.getID()
+					&& aS.getVertex().getDistanceInMeters(bS.getVertex()) > closenessThreshold) {
+				same = false;
+				break;
+			}
+		}
 
-        return ret;
-    }
+		if (same && (aLi.hasNext() || bLi.hasNext())) {
+			System.out.println("Stops left!");
+			same = false;
+		}
+
+		return same;
+	}
+
+	@Override
+	public String toString() {
+		int vertices = 0;
+		String tripsList = "";
+		for (Trip t : mPath) {
+			vertices += t.getVertices().size() - 1;
+			tripsList += t.get_trip_id() + " ";
+		}
+		String ret = "Route: " + mRoute.getName() + "   Service: "
+				+ mPath.get(0).get_service_id() + "   StartTime: " + mStartTime
+				+ "   EndTime: " + mEndTime + "   Points in path: " + vertices
+				+ "   Trips: " + tripsList;
+
+		return ret;
+	}
 }
