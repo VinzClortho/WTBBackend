@@ -79,7 +79,7 @@ public final class Vertex extends GTFSParser {
 	/**
 	 * Stub constructor
 	 * 
-	 * @param inLine
+	 * @param inLine A String
 	 */
 	public Vertex(String inLine) {
 	}

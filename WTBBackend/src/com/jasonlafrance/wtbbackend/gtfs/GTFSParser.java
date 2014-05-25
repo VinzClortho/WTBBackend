@@ -150,7 +150,7 @@ public abstract class GTFSParser {
 	/**
 	 * Get the filename for the implemented class
 	 * 
-	 * @return
+	 * @return The GTFS table file name
 	 */
 	public abstract String getFilename();
 

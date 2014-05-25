@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.vehicle;
 
@@ -23,38 +23,63 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 /**
- *
+ * This class manages a queue of Drones. Drones are started as their start times
+ * are passed
+ * 
  * @author Jason LaFrance
  */
 public class DroneQueue {
 
-    private final LinkedList<Drone> runningDrones;
-    private final LinkedList<Drone> waitingDrones;
+	private final LinkedList<Drone> runningDrones;
+	private final LinkedList<Drone> waitingDrones;
 
-    // should be a priority queue, but I don't care enough for testing
-    public DroneQueue(LinkedList<Drone> inDrones) {
-        runningDrones = inDrones;
-        waitingDrones = new LinkedList<>();
-    }
+	// should be a priority queue, but I don't care enough for testing
+	/**
+	 * Create a DroneQueue object
+	 * 
+	 * @param inDrones
+	 *            List of Drones to add to the queue
+	 */
+	public DroneQueue(LinkedList<Drone> inDrones) {
+		runningDrones = inDrones;
+		waitingDrones = new LinkedList<>();
+	}
 
-    public synchronized void addDrone(Drone inDrone) {
-        waitingDrones.add(inDrone);
-    }
+	/**
+	 * Add a Drone to the queue
+	 * 
+	 * @param inDrone
+	 *            The Drone to add
+	 */
+	public synchronized void addDrone(Drone inDrone) {
+		waitingDrones.add(inDrone);
+	}
 
-    public synchronized void check(int inTimecode) {
-        ListIterator li = waitingDrones.listIterator();
+	/**
+	 * Check if it's time to start any Drones based in a given time code
+	 * 
+	 * @param inTimecode
+	 *            The time code to check against
+	 */
+	public synchronized void check(int inTimecode) {
+		ListIterator li = waitingDrones.listIterator();
 
-        while (li.hasNext()) {
-            Drone d = (Drone) li.next();
-            if (d.getStartTimcode() <= inTimecode) {
-                runningDrones.add(d);
-                li.remove();
-                d.startDrone();
-            }
-        }
-    }
+		while (li.hasNext()) {
+			Drone d = (Drone) li.next();
+			if (d.getStartTimcode() <= inTimecode) {
+				runningDrones.add(d);
+				li.remove();
+				d.startDrone();
+			}
+		}
+	}
 
-    public boolean isEmpty() {
-        return waitingDrones.isEmpty();
-    }
+	/**
+	 * Check if the queue is empty
+	 * 
+	 * @return True if the queue is empty
+	 */
+	public boolean isEmpty() {
+		return waitingDrones.isEmpty();
+	}
 }

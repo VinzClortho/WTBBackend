@@ -38,10 +38,14 @@ import com.jasonlafrance.wtbbackend.vehicle.Vehicle;
 
 /**
  * 
+ * 
  * @author Jason LaFrance
  */
 public class WTBBackend {
 
+	/**
+	 * Delete the old KML files.
+	 */
 	private static void clearKMLs() {
 		File dir = new File("./");
 
@@ -112,8 +116,6 @@ public class WTBBackend {
 				endTime = System.currentTimeMillis();
 				System.out.println(dir + " loaded and parsed in "
 						+ ((endTime - startTime) / 1000.0) + " seconds");
-
-				current.calcExtremes();
 
 				System.out.println(dir + " id: " + current.getID());
 

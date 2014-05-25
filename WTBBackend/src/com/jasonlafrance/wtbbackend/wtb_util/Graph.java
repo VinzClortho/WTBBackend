@@ -15,120 +15,193 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.wtb_util;
 
 import java.util.HashSet;
 
 /**
- *
+ * Class for dealing with graph structures
+ * 
  * @author Jason LaFrance
  */
 public class Graph {
 
-    public static class Node {
+	/**
+	 * Edge class
+	 * 
+	 * @author Jason LaFrance
+	 * 
+	 */
+	public static class Edge {
 
-        private final double nLat, nLon;
-        private final HashSet<Node> nLinks;
-        private final int nHashcode;
+		private final Node A, B;
+		private final int eHashcode;
+		private String eColor;
 
-        public Node(double inLat, double inLon) {
-            nLat = inLat;
-            nLon = inLon;
-            nLinks = new HashSet<>();
-            nHashcode = (int) (Double.doubleToRawLongBits(nLat) * 31 + Double.doubleToRawLongBits(nLon));
-        }
+		/**
+		 * Create an Edge connecting two Nodes
+		 * 
+		 * @param a
+		 *            Node A
+		 * @param b
+		 *            Node B
+		 */
+		public Edge(Node a, Node b) {
+			if (a.hashCode() < b.hashCode()) {
+				A = a;
+				B = b;
+			} else {
+				A = b;
+				B = a;
+			}
+			eHashcode = A.hashCode() * 3131 + B.hashCode();
+		}
 
-        public double getLat() {
-            return nLat;
-        }
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final Edge other = (Edge) obj;
+			if (this.eHashcode != other.eHashcode) {
+				return false;
+			}
+			return true;
+		}
 
-        public double getLon() {
-            return nLon;
-        }
+		/**
+		 * Get Node A
+		 * 
+		 * @return Node A
+		 */
+		public Node getA() {
+			return A;
+		}
 
-        public void addLink(Node in) {
-            nLinks.add(in);
-        }
+		/**
+		 * Get Node B
+		 * 
+		 * @return Node B
+		 */
+		public Node getB() {
+			return B;
+		}
 
-        public Node[] getLinks() {
-            return nLinks.toArray(new Node[nLinks.size()]);
-        }
+		/**
+		 * Get the edge's color
+		 * 
+		 * @return Edge color
+		 */
+		public String getColor() {
+			return eColor;
+		}
 
-        @Override
-        public int hashCode() {
-            return nHashcode;
-        }
+		@Override
+		public int hashCode() {
+			return eHashcode;
+		}
 
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final Node other = (Node) obj;
-            if (this.nHashcode != other.nHashcode) {
-                return false;
-            }
-            return true;
-        }
-    }
+		/**
+		 * Set the edge's color
+		 * 
+		 * @param in
+		 *            Color value to set
+		 */
+		public void setColor(String in) {
+			eColor = in;
+		}
 
-    public static class Edge {
+	}
 
-        private final Node A, B;
-        private final int eHashcode;
-        private String eColor;
+	/**
+	 * Node class
+	 * 
+	 * @author Jason LaFrance
+	 * 
+	 */
+	public static class Node {
 
-        public Edge(Node a, Node b) {
-            if (a.hashCode() < b.hashCode()) {
-                A = a;
-                B = b;
-            } else {
-                A = b;
-                B = a;
-            }
-            eHashcode = A.hashCode() * 3131 + B.hashCode();
-        }
+		private final double nLat, nLon;
+		private final HashSet<Node> nLinks;
+		private final int nHashcode;
 
-        public Node getA() {
-            return A;
-        }
+		/**
+		 * Create a Node at the given coordinates
+		 * 
+		 * @param inLat
+		 *            Latitude
+		 * @param inLon
+		 *            Longitude
+		 */
+		public Node(double inLat, double inLon) {
+			nLat = inLat;
+			nLon = inLon;
+			nLinks = new HashSet<>();
+			// Generate the hash value
+			nHashcode = (int) (Double.doubleToRawLongBits(nLat) * 31 + Double
+					.doubleToRawLongBits(nLon));
+		}
 
-        public Node getB() {
-            return B;
-        }
+		/**
+		 * Add a link to another Node
+		 * 
+		 * @param in
+		 *            Node to link to
+		 */
+		public void addLink(Node in) {
+			nLinks.add(in);
+		}
 
-        public void setColor(String in) {
-            eColor = in;
-        }
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final Node other = (Node) obj;
+			if (this.nHashcode != other.nHashcode) {
+				return false;
+			}
+			return true;
+		}
 
-        public String getColor() {
-            return eColor;
-        }
+		/**
+		 * Get the latitude
+		 * 
+		 * @return Latidude
+		 */
+		public double getLat() {
+			return nLat;
+		}
 
-        @Override
-        public int hashCode() {
-            return eHashcode;
-        }
+		/**
+		 * Get a list of Nodes linked to this one
+		 * 
+		 * @return List of Nodes
+		 */
+		public Node[] getLinks() {
+			return nLinks.toArray(new Node[nLinks.size()]);
+		}
 
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final Edge other = (Edge) obj;
-            if (this.eHashcode != other.eHashcode) {
-                return false;
-            }
-            return true;
-        }
+		/**
+		 * Get the longitude
+		 * 
+		 * @return Longitude
+		 */
+		public double getLon() {
+			return nLon;
+		}
 
-    }
+		@Override
+		public int hashCode() {
+			return nHashcode;
+		}
+	}
 }

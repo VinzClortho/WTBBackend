@@ -15,89 +15,143 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.wtb_util;
 
 /**
- *
+ * GPS calculation function class
+ * 
  * @author Jason LaFrance
  */
 public class GPSCalc {
 
-    public final static double metersPerLat = 111300.0;
-    public final static double metersPerLon = 85300.0;
+	// general estimates for North America
+	public final static double metersPerLat = 111300.0;
+	public final static double metersPerLon = 85300.0;
 
-    public static double getDistanceInMeters(double aLat, double aLon, double bLat, double bLon) {
-        double dLat = (aLat - bLat) * metersPerLat;
-        dLat *= dLat;
-        double dLon = (aLon - bLon) * metersPerLon;
-        dLon *= dLon;
-        return Math.sqrt(dLat + dLon);
-    }
-    
-    public static double getRawDistanceInMeters(double aLat, double aLon, double bLat, double bLon) {
-        double dLat = (aLat - bLat) * metersPerLat;
-        dLat *= dLat;
-        double dLon = (aLon - bLon) * metersPerLon;
-        dLon *= dLon;
-        return dLat + dLon;
-    }
+	/**
+	 * Calculate a bearing between a pair of coordinates
+	 * 
+	 * @param aLat
+	 *            Latidude of first point
+	 * @param aLon
+	 *            Longitude of first point
+	 * @param bLat
+	 *            Latitude of second point
+	 * @param bLon
+	 *            Longitude of second point
+	 * @return The bearing between the two points
+	 */
+	public static double getBearing(double aLat, double aLon, double bLat,
+			double bLon) {
+		// needs to be more accurate!
+		/*
+		 * double dX = (bLon - aLon) * metersPerLon; double dY = (bLat - aLat) *
+		 * metersPerLat; double r = Math.sqrt(dX * dX + dY * dY); return
+		 * (Math.acos(dX / r) * 180.0 / Math.PI);
+		 */
+		/*
+		 * aLat = Math.toRadians(aLat); aLon = Math.toRadians(aLon); bLat =
+		 * Math.toRadians(bLat); bLon = Math.toRadians(bLon); double dY =
+		 * Math.sin(aLon) * Math.cos(bLat); double dX = Math.cos(aLat) *
+		 * Math.sin(bLat) - Math.sin(aLat) * Math.cos(bLat) * Math.cos(aLon);
+		 * double heading = Math.toDegrees(Math.atan2(dY, dX)); if(heading < 0)
+		 * heading += 360.0; return heading;
+		 */
+		aLat = Math.toRadians(aLat);
+		aLon = Math.toRadians(aLon);
+		bLat = Math.toRadians(bLat);
+		bLon = Math.toRadians(bLon);
+		double dLon = bLon - aLon;
+		double y = Math.sin(dLon) * Math.cos(bLat);
+		double x = Math.cos(aLat) * Math.sin(bLat) - Math.sin(aLat)
+				* Math.cos(bLat) * Math.cos(dLon);
+		double bearing = Math.atan2(y, x);
+		bearing = Math.toDegrees(bearing);
 
-    public static double getDistanceInMetersNew(double aLat, double aLon, double bLat, double bLon) {
-        final double R = 6371000; // Earth's radius in meters
+		if (bearing < 0.0) {
+			bearing += 360.0;
+		}
 
-        aLat = Math.toRadians(aLat);
-        aLon = Math.toRadians(aLon);
-        bLat = Math.toRadians(bLat);
-        bLon = Math.toRadians(bLon);
+		return bearing;
+	}
 
-        double dLat = bLat - aLat;
-        double dLon = bLon - aLon;
+	/**
+	 * Get the distance between a pair of points in meters
+	 * 
+	 * @param aLat
+	 *            Latidude of first point
+	 * @param aLon
+	 *            Longitude of first point
+	 * @param bLat
+	 *            Latitude of second point
+	 * @param bLon
+	 *            Longitude of second point
+	 * @return The distance between the two points
+	 */
+	public static double getDistanceInMeters(double aLat, double aLon,
+			double bLat, double bLon) {
+		double dLat = (aLat - bLat) * metersPerLat;
+		dLat *= dLat;
+		double dLon = (aLon - bLon) * metersPerLon;
+		dLon *= dLon;
+		return Math.sqrt(dLat + dLon);
+	}
 
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(aLat) * Math.cos(bLat);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double d = R * c;
-        return d;
-    }
+	/**
+	 * Get the distance between a pair of points in meters. New version which
+	 * should be more accurate.
+	 * 
+	 * @param aLat
+	 *            Latidude of first point
+	 * @param aLon
+	 *            Longitude of first point
+	 * @param bLat
+	 *            Latitude of second point
+	 * @param bLon
+	 *            Longitude of second point
+	 * @return The distance between the two points
+	 */
+	public static double getDistanceInMetersNew(double aLat, double aLon,
+			double bLat, double bLon) {
+		final double R = 6371000; // Earth's radius in meters
 
-    public static double getBearing(double aLat, double aLon, double bLat, double bLon) {
-        // needs to be more accurate!
-        /*
-         double dX = (bLon - aLon) * metersPerLon;
-         double dY = (bLat - aLat) * metersPerLat;
-         double r = Math.sqrt(dX * dX + dY * dY);
-         return (Math.acos(dX / r) * 180.0 / Math.PI);
-         */
-        /* 
-         aLat = Math.toRadians(aLat);
-         aLon = Math.toRadians(aLon);
-         bLat = Math.toRadians(bLat);
-         bLon = Math.toRadians(bLon);
-         double dY = Math.sin(aLon) * Math.cos(bLat);
-         double dX = Math.cos(aLat) * Math.sin(bLat)
-         - Math.sin(aLat) * Math.cos(bLat) * Math.cos(aLon);
-         double heading = Math.toDegrees(Math.atan2(dY, dX));
-         if(heading < 0) heading += 360.0;
-         return heading;
-         */
-        aLat = Math.toRadians(aLat);
-        aLon = Math.toRadians(aLon);
-        bLat = Math.toRadians(bLat);
-        bLon = Math.toRadians(bLon);
-        double dLon = bLon - aLon;
-        double y = Math.sin(dLon) * Math.cos(bLat);
-        double x = Math.cos(aLat) * Math.sin(bLat)
-                - Math.sin(aLat) * Math.cos(bLat) * Math.cos(dLon);
-        double bearing = Math.atan2(y, x);
-        bearing = Math.toDegrees(bearing);
+		aLat = Math.toRadians(aLat);
+		aLon = Math.toRadians(aLon);
+		bLat = Math.toRadians(bLat);
+		bLon = Math.toRadians(bLon);
 
-        if (bearing < 0.0) {
-            bearing += 360.0;
-        }
+		double dLat = bLat - aLat;
+		double dLon = bLon - aLon;
 
-        return bearing;
-    }
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2)
+				* Math.sin(dLon / 2) * Math.cos(aLat) * Math.cos(bLat);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double d = R * c;
+		return d;
+	}
+
+	/**
+	 * Get the raw, unrooted distance between a pair of points
+	 * 
+	 * @param aLat
+	 *            Latidude of first point
+	 * @param aLon
+	 *            Longitude of first point
+	 * @param bLat
+	 *            Latitude of second point
+	 * @param bLon
+	 *            Longitude of second point
+	 * @return The unrooted distance between the two points
+	 */
+	public static double getRawDistanceInMeters(double aLat, double aLon,
+			double bLat, double bLon) {
+		double dLat = (aLat - bLat) * metersPerLat;
+		dLat *= dLat;
+		double dLon = (aLon - bLon) * metersPerLon;
+		dLon *= dLon;
+		return dLat + dLon;
+	}
 
 }

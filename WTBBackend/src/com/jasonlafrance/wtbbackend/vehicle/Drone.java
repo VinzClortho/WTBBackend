@@ -15,7 +15,7 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.vehicle;
 
@@ -49,364 +49,461 @@ import com.jasonlafrance.wtbbackend.gtfs.Vertex;
 import com.jasonlafrance.wtbbackend.wtb_util.HexUtil;
 
 /**
- * Testing Drone
- *
+ * Drone class for vehicle tracking testing. Drones mimic vehicles based on
+ * supplied GTFS routing and scheduling. The drones also only interact with the
+ * backend server via the GPS input portal, so as far as the server knows, these
+ * are real vehicles.
+ * 
  * @author Jason LaFrance
  */
 public final class Drone extends Thread {
 
-    private final ArrayList<Vertex> mPath = new ArrayList<>();
-    private boolean isActive;
-    private final int mID;
-    private final String serverURL;
+	/**
+	 * Wrapper class for pairing vertices with specific sequence ordering
+	 * 
+	 * @author Jason LaFrance
+	 * 
+	 */
+	private class Insertion {
 
-    private final double mSpeed;
-    private double mDX, mDY;
-    private double mLon, mLat;
-    private final double mPushWait;
-    private double segDistance;
-    private double segTraveledDistance;
-    private double distPerTick;
-    private int waitMillis;
-    private int mStartTimecode;
-    private Cipher cipher;
+		private final int index;
+		private final Vertex item;
 
-    public Drone(int inID, RoutePath inRoute, double startSpeed, double inPushWait, String inServer, String inPassword, boolean randomStart) {
-        mID = inID;
-        mPushWait = inPushWait;
-        serverURL = inServer;
-        mSpeed = Vehicle.mphToMetersPerSec(startSpeed);
+		/**
+		 * Create an Insertion object with given data
+		 * 
+		 * @param index
+		 *            Index to set to Vertex
+		 * @param item
+		 *            The Vertex to store
+		 */
+		public Insertion(int index, Vertex item) {
+			this.index = index;
+			this.item = item;
+		}
 
-        //System.out.println("new drone: " + inID);
-        buildVertexPath(inRoute, randomStart);
+		/**
+		 * Get the index
+		 * 
+		 * @return The index value
+		 */
+		public int getIndex() {
+			return index;
+		}
 
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA");
-            digest.update(inPassword.getBytes());
-            SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
-            cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+		/**
+		 * Get the Vertex
+		 * 
+		 * @return The Vertex object
+		 */
+		public Vertex getVertex() {
+			return item;
+		}
+	}
 
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
-            System.out.println("Drone: Can't initialize cipher key for some reason!");
-            return;
-        }
+	private final ArrayList<Vertex> mPath = new ArrayList<>();
+	private boolean isActive;
+	private final int mID;
 
-        setup();
+	private final String serverURL;
+	private final double mSpeed;
+	private double mDX, mDY;
+	private double mLon, mLat;
+	private final double mPushWait;
+	private double segDistance;
+	private double segTraveledDistance;
+	private double distPerTick;
+	private int waitMillis;
+	private int mStartTimecode;
 
-        // uncomment this for non-DroneQueue use
-        //this.start();
-    }
+	private Cipher cipher;
 
-    public void startDrone() {
-        if (!isActive) {
-            this.setPriority(Thread.MIN_PRIORITY);
-            this.start();
-        }
-    }
+	/**
+	 * Create a Drone object from given data
+	 * 
+	 * @param inID
+	 *            The Drone's ID for tracking
+	 * @param inRoute
+	 *            The Drone's route
+	 * @param startSpeed
+	 *            The Drone's steady speed
+	 * @param inPushWait
+	 *            The time between GPS beacons
+	 * @param inServer
+	 *            The backend server URL
+	 * @param inPassword
+	 *            The backend server password
+	 * @param randomStart
+	 *            If the Drone should start randomly instead of as scheduled
+	 *            (DEBUGGING)
+	 */
+	public Drone(int inID, RoutePath inRoute, double startSpeed,
+			double inPushWait, String inServer, String inPassword,
+			boolean randomStart) {
+		mID = inID;
+		mPushWait = inPushWait;
+		serverURL = inServer;
+		mSpeed = Vehicle.mphToMetersPerSec(startSpeed);
 
-    public void stopDrone() {
-        isActive = false;
-    }
+		// System.out.println("new drone: " + inID);
+		buildVertexPath(inRoute, randomStart);
 
-    private void buildVertexPath(RoutePath inRoute, boolean randomStart) {
-        mPath.clear();
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA");
+			digest.update(inPassword.getBytes());
+			SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
+			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			cipher.init(Cipher.ENCRYPT_MODE, key);
 
-        ListIterator ti = inRoute.getPath().listIterator();
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException
+				| InvalidKeyException e) {
+			System.out
+					.println("Drone: Can't initialize cipher key for some reason!");
+			return;
+		}
 
-        while (ti.hasNext()) {
-            Trip t = (Trip) ti.next();
-            if (!mPath.isEmpty() && mPath.get(mPath.size() - 1).getRawDistance(t.getVertices().get(0)) == 0.0) {
-                mPath.remove(mPath.size() - 1);
-            }
+		setup();
 
-            if (randomStart) {
-                int start = (int) (Math.random() * t.getVertices().size());
-                ListIterator vi = t.getVertices().listIterator();
-                while (start > 0) {
-                    vi.next();
-                    start--;
-                }
+		// uncomment this for non-DroneQueue use
+		// this.start();
+	}
 
-                while (vi.hasNext()) {
-                    mPath.add((Vertex) vi.next());
-                    Vertex v = new Vertex();
-                }
-            } else {
-                if (!mPath.isEmpty()) {
-                    mPath.remove(mPath.size() - 1);
-                }
-                mPath.addAll(t.getVertices());
-            }
-        }
-        addStopsToVertexList(mPath, inRoute.getStops());
-    }
+	/**
+	 * Add Stops to the Vertex list
+	 * 
+	 * @param vertices
+	 *            The Vertex list
+	 * @param stops
+	 *            A list of Stops wrapped in StopAdapters
+	 */
+	public void addStopsToVertexList(ArrayList<Vertex> vertices,
+			ArrayList<StopAdapter> stops) {
+		// bail if either vertex or stop lists are empty
+		if (vertices.isEmpty() || stops.isEmpty()) {
+			return;
+		}
 
-    @Override
-    public void run() {
-        isActive = true;
+		ArrayList<Insertion> toInsert = new ArrayList<>();
+		// find points close to edges
+		Vertex a, b, c;
+		ListIterator li;
 
-        while (isActive) {
-            try {
-                sleep(waitMillis);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Drone.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            tick();
-        }
-    }
+		for (int i = 0; i < stops.size(); i++) {
+			// System.out.println("Adding stop " + i + "...");
+			StopAdapter s = stops.get(i);
+			c = new Vertex(s.getStop().get_stop_lat(), s.getStop()
+					.get_stop_lon());
 
-    private void setup() {
-        Vertex v = null, target = null;
+			double minDistance = Double.MAX_VALUE;
+			Vertex adjustedPosition = null;
+			Vertex addAfter = null;
 
-        int now = timeToMinutes(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-        boolean lookingForStart = true;
+			li = vertices.listIterator();
+			b = (Vertex) li.next();
 
-        while (!mPath.isEmpty() && lookingForStart) {
-            v = mPath.get(0);
-            mPath.remove(0);
-            if (v.isStop() && v.getStop().getStopTime().getArrivalTimecode() >= now) {
-                mStartTimecode = v.getStop().getStopTime().getArrivalTimecode();
-                //System.out.println(mID + " start time: " + v.getStop().getStopTime().get_arrival_time());
-                lookingForStart = false;
-            }
-        }
+			while (li.hasNext()) {
+				a = b;
+				b = (Vertex) li.next();
+				Vertex testV = getLineSegmentIntersect(a, b, c);
+				double dist = c.getRawDistance(testV);
+				if (dist < minDistance) {
+					minDistance = dist;
+					adjustedPosition = testV;
+					addAfter = a;
+				}
+			}
 
-        if (!mPath.isEmpty()) {
-            target = mPath.get(0);
-            mPath.remove(0);
-        }
+			// insert a new vertex
+			// s.setCoordinates(adjustedPosition.get_shape_pt_lat(),
+			// adjustedPosition.get_shape_pt_lon());
+			adjustedPosition.set_shape_pt_lat(s.getStop().get_stop_lat());
+			adjustedPosition.set_shape_pt_lon(s.getStop().get_stop_lon());
+			adjustedPosition.setStop(s);
+			int insert = vertices.indexOf(addAfter) + 1;
+			toInsert.add(new Insertion(insert, adjustedPosition));
 
-        while (v.equals(target) && !mPath.isEmpty()) {
-            target = mPath.get(0);
-            mPath.remove(0);
-        }
+		}
 
-        if (v instanceof Vertex && target != null && target instanceof Vertex) {
-            //mSpeed = Vehicle.mphToMetersPerSec(35.0);
-            mLat = v.get_shape_pt_lat();
-            mLon = v.get_shape_pt_lon();
+		Collections.sort(toInsert, new Comparator<Insertion>() {
+			@Override
+			public int compare(Insertion a, Insertion b) {
+				if (a.getIndex() < b.getIndex()) {
+					return -1;
+				} else if (a.getIndex() > b.getIndex()) {
+					return 1;
+				}
+				return 0;
+			}
+		});
 
-            updateMotion(mLat, mLon, target);
+		if (!toInsert.isEmpty()) {
 
-            waitMillis = (int) (mPushWait * 1000.0);
-        }
-    }
+			// ArrayList<Vertex> newList = new ArrayList<>();
+			int newSize = vertices.size() + toInsert.size();
 
-    private void updateMotion(double aLat, double aLon, Vertex b) {
-        double dist = b.getDistanceInMeters(aLat, aLon);
+			// newList.ensureCapacity(newSize);
 
-        double timeAtSpeed = dist / mSpeed;
-        if (timeAtSpeed < 1.0) {
-            timeAtSpeed = 1.0;
-        }
+			/*
+			 * int origIndex = 0; int insertIndex = 0; int newIndex = 0; int
+			 * nextInsertIndex = toInsert.get(0).getIndex();
+			 * 
+			 * while (newIndex < newSize) { if (newIndex == nextInsertIndex) {
+			 * newList.add(toInsert.get(insertIndex).getVertex());
+			 * insertIndex++; if (insertIndex < toInsert.size()) {
+			 * nextInsertIndex = toInsert.get(insertIndex).getIndex() +
+			 * insertIndex; } else { nextInsertIndex = -1; } } else if
+			 * (origIndex < vertices.size()) {
+			 * newList.add(vertices.get(origIndex)); origIndex++; } newIndex++;
+			 * }
+			 */
+			int newIndex = 0;
+			int origIndex = 0;
 
-        mDY = (b.get_shape_pt_lat() - aLat) / timeAtSpeed * mPushWait;
-        mDX = (b.get_shape_pt_lon() - aLon) / timeAtSpeed * mPushWait;
+			Vertex[] from = vertices.toArray(new Vertex[vertices.size()]);
+			Vertex[] to = new Vertex[newSize];
 
-        segDistance = dist;
-        segTraveledDistance = 0.0;
-        distPerTick = mSpeed * mPushWait;
-    }
+			int stopIndex = 0;
+			int nextInsertIndex = toInsert.get(stopIndex).getIndex();
 
-    private void sendPacket() {
-        GPSPacket gp = new GPSPacket((short) mID, (float) mLat, (float) mLon);
-        String outHex = "";
-        try {
-            byte[] outPacket = cipher.doFinal(gp.getBytes());
-            outHex = HexUtil.getHex(outPacket);
-        } catch (IllegalBlockSizeException | BadPaddingException ex) {
-            //Logger.getLogger(Drone.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        String response;
-        if (outHex.length() > 0) {
-            try {
-                response = com.jasonlafrance.wtbbackend.gps_portal.HTTPOutput.HTTPGet(serverURL + "/" + outHex);
-            } catch (Exception ex) {
-                Logger.getLogger(Drone.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+			while (newIndex < newSize) {
+				if (newIndex == nextInsertIndex) {
+					newIndex++;
+					to[nextInsertIndex] = toInsert.get(stopIndex).getVertex();
+					stopIndex++;
+					if (stopIndex < stops.size()) {
+						nextInsertIndex = toInsert.get(stopIndex).getIndex()
+								+ stopIndex;
+					} else {
+						nextInsertIndex = -1;
+					}
+				} else {
+					int length;
+					if (nextInsertIndex != -1) {
+						length = nextInsertIndex - newIndex;
+					} else {
+						length = newSize - newIndex;
+					}
+					if (length > 0) {
+						System.arraycopy(from, origIndex, to, newIndex, length);
+						origIndex += length;
+						newIndex += length;
+					}
+				}
+			}
+			vertices.clear();
+			vertices.addAll(Arrays.asList(to));
+		}
+	}
 
-    private void tick() {
-        mLat = mLat + mDY;
-        mLon = mLon + mDX;
+	/**
+	 * Build a Vertex path from a RoutePath object
+	 * 
+	 * @param inRoute
+	 *            The RoutePath to extrapolate Vertex data from
+	 * @param randomStart
+	 *            If the Drone should start randomly instead of as scheduled
+	 *            (DEBUGGING)
+	 */
+	private void buildVertexPath(RoutePath inRoute, boolean randomStart) {
+		mPath.clear();
 
-        sendPacket();
+		ListIterator ti = inRoute.getPath().listIterator();
 
-        segTraveledDistance += distPerTick;
+		while (ti.hasNext()) {
+			Trip t = (Trip) ti.next();
+			if (!mPath.isEmpty()
+					&& mPath.get(mPath.size() - 1).getRawDistance(
+							t.getVertices().get(0)) == 0.0) {
+				mPath.remove(mPath.size() - 1);
+			}
 
-        if (segTraveledDistance >= segDistance) {
-            // start next segment or end
-            if (!mPath.isEmpty()) {
-                Vertex v = mPath.get(0);
-                mPath.remove(0);
-                if (v instanceof Vertex) {
-                    updateMotion(mLat, mLon, v);
-                } else {
-                    isActive = false;
-                }
-                if (v.isStop() && v.getStop().getStopTime() != null) {
-                    while (v.getStop().getStopTime().getDepartureTimecode()
-                            > timeToMinutes(new SimpleDateFormat("HH:mm:ss").format(new Date()))) {
-                        try {
-                            Thread.sleep(60000);        // wait 1 minute!
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(Drone.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            } else {
-                isActive = false;
-            }
-        }
-    }
+			if (randomStart) {
+				int start = (int) (Math.random() * t.getVertices().size());
+				ListIterator vi = t.getVertices().listIterator();
+				while (start > 0) {
+					vi.next();
+					start--;
+				}
 
-    public int getStartTimcode() {
-        return mStartTimecode;
-    }
+				while (vi.hasNext()) {
+					mPath.add((Vertex) vi.next());
+					Vertex v = new Vertex();
+				}
+			} else {
+				if (!mPath.isEmpty()) {
+					mPath.remove(mPath.size() - 1);
+				}
+				mPath.addAll(t.getVertices());
+			}
+		}
+		addStopsToVertexList(mPath, inRoute.getStops());
+	}
 
-    private class Insertion {
+	/**
+	 * Get this Drone's start time code
+	 * 
+	 * @return The start time code
+	 */
+	public int getStartTimcode() {
+		return mStartTimecode;
+	}
 
-        private int index;
-        private Vertex item;
+	@Override
+	public void run() {
+		isActive = true;
 
-        public Insertion(int index, Vertex item) {
-            this.index = index;
-            this.item = item;
-        }
+		while (isActive) {
+			try {
+				sleep(waitMillis);
+			} catch (InterruptedException ex) {
+				Logger.getLogger(Drone.class.getName()).log(Level.SEVERE, null,
+						ex);
+			}
+			tick();
+		}
+	}
 
-        public int getIndex() {
-            return index;
-        }
+	/**
+	 * Send a GPS packet to the backend server.
+	 */
+	private void sendPacket() {
+		GPSPacket gp = new GPSPacket((short) mID, (float) mLat, (float) mLon);
+		String outHex = "";
+		try {
+			byte[] outPacket = cipher.doFinal(gp.getBytes());
+			outHex = HexUtil.getHex(outPacket);
+		} catch (IllegalBlockSizeException | BadPaddingException ex) {
+			// Logger.getLogger(Drone.class.getName()).log(Level.SEVERE, null,
+			// ex);
+		}
+		String response;
+		if (outHex.length() > 0) {
+			try {
+				response = com.jasonlafrance.wtbbackend.gps_portal.HTTPOutput
+						.HTTPGet(serverURL + "/" + outHex);
+			} catch (Exception ex) {
+				Logger.getLogger(Drone.class.getName()).log(Level.SEVERE, null,
+						ex);
+			}
+		}
+	}
 
-        public Vertex getVertex() {
-            return item;
-        }
-    }
+	/**
+	 * Initialize the Drone's state
+	 */
+	private void setup() {
+		Vertex v = null, target = null;
 
-    public void addStopsToVertexList(ArrayList<Vertex> vertices, ArrayList<StopAdapter> stops) {
-        // bail if either vertex or stop lists are empty
-        if (vertices.isEmpty() || stops.isEmpty()) {
-            return;
-        }
+		int now = timeToMinutes(new SimpleDateFormat("HH:mm:ss")
+				.format(new Date()));
+		boolean lookingForStart = true;
 
-        ArrayList<Insertion> toInsert = new ArrayList<>();
-        // find points close to edges
-        Vertex a, b, c;
-        ListIterator li;
+		while (!mPath.isEmpty() && lookingForStart) {
+			v = mPath.get(0);
+			mPath.remove(0);
+			if (v.isStop()
+					&& v.getStop().getStopTime().getArrivalTimecode() >= now) {
+				mStartTimecode = v.getStop().getStopTime().getArrivalTimecode();
+				// System.out.println(mID + " start time: " +
+				// v.getStop().getStopTime().get_arrival_time());
+				lookingForStart = false;
+			}
+		}
 
-        for (int i = 0; i < stops.size(); i++) {
-            //System.out.println("Adding stop " + i + "...");
-            StopAdapter s = stops.get(i);
-            c = new Vertex(s.getStop().get_stop_lat(), s.getStop().get_stop_lon());
+		if (!mPath.isEmpty()) {
+			target = mPath.get(0);
+			mPath.remove(0);
+		}
 
-            double minDistance = Double.MAX_VALUE;
-            Vertex adjustedPosition = null;
-            Vertex addAfter = null;
+		while (v.equals(target) && !mPath.isEmpty()) {
+			target = mPath.get(0);
+			mPath.remove(0);
+		}
 
-            li = vertices.listIterator();
-            b = (Vertex) li.next();
+		if (v instanceof Vertex && target != null && target instanceof Vertex) {
+			// mSpeed = Vehicle.mphToMetersPerSec(35.0);
+			mLat = v.get_shape_pt_lat();
+			mLon = v.get_shape_pt_lon();
 
-            while (li.hasNext()) {
-                a = b;
-                b = (Vertex) li.next();
-                Vertex testV = getLineSegmentIntersect(a, b, c);
-                double dist = c.getRawDistance(testV);
-                if (dist < minDistance) {
-                    minDistance = dist;
-                    adjustedPosition = testV;
-                    addAfter = a;
-                }
-            }
+			updateMotion(mLat, mLon, target);
 
-            // insert a new vertex
-            //s.setCoordinates(adjustedPosition.get_shape_pt_lat(), adjustedPosition.get_shape_pt_lon());
-            adjustedPosition.set_shape_pt_lat(s.getStop().get_stop_lat());
-            adjustedPosition.set_shape_pt_lon(s.getStop().get_stop_lon());
-            adjustedPosition.setStop(s);
-            int insert = vertices.indexOf(addAfter) + 1;
-            toInsert.add(new Insertion(insert, adjustedPosition));
+			waitMillis = (int) (mPushWait * 1000.0);
+		}
+	}
 
-        }
+	/**
+	 * Start the Drone in action
+	 */
+	public void startDrone() {
+		if (!isActive) {
+			this.setPriority(Thread.MIN_PRIORITY);
+			this.start();
+		}
+	}
 
-        Collections.sort(toInsert, new Comparator<Insertion>() {
-            @Override
-            public int compare(Insertion a, Insertion b) {
-                if (a.getIndex() < b.getIndex()) {
-                    return -1;
-                } else if (a.getIndex() > b.getIndex()) {
-                    return 1;
-                }
-                return 0;
-            }
-        });
+	/**
+	 * Stop the Drone
+	 */
+	public void stopDrone() {
+		isActive = false;
+	}
 
-        if (!toInsert.isEmpty()) {
+	/**
+	 * This method handles what the Drone is doing as the moment
+	 */
+	private void tick() {
+		mLat = mLat + mDY;
+		mLon = mLon + mDX;
 
-            //ArrayList<Vertex> newList = new ArrayList<>();
-            int newSize = vertices.size() + toInsert.size();
+		sendPacket();
 
-            //newList.ensureCapacity(newSize);
+		segTraveledDistance += distPerTick;
 
-            /*
-             int origIndex = 0;
-             int insertIndex = 0;
-             int newIndex = 0;
-             int nextInsertIndex = toInsert.get(0).getIndex();
-            
-             while (newIndex < newSize) {
-             if (newIndex == nextInsertIndex) {
-             newList.add(toInsert.get(insertIndex).getVertex());
-             insertIndex++;
-             if (insertIndex < toInsert.size()) {
-             nextInsertIndex = toInsert.get(insertIndex).getIndex() + insertIndex;
-             } else {
-             nextInsertIndex = -1;
-             }
-             } else if (origIndex < vertices.size()) {
-             newList.add(vertices.get(origIndex));
-             origIndex++;
-             }
-             newIndex++;
-             }
-             */
-            int newIndex = 0;
-            int origIndex = 0;
+		if (segTraveledDistance >= segDistance) {
+			// start next segment or end
+			if (!mPath.isEmpty()) {
+				Vertex v = mPath.get(0);
+				mPath.remove(0);
+				if (v instanceof Vertex) {
+					updateMotion(mLat, mLon, v);
+				} else {
+					isActive = false;
+				}
+				if (v.isStop() && v.getStop().getStopTime() != null) {
+					while (v.getStop().getStopTime().getDepartureTimecode() > timeToMinutes(new SimpleDateFormat(
+							"HH:mm:ss").format(new Date()))) {
+						try {
+							Thread.sleep(60000); // wait 1 minute!
+						} catch (InterruptedException ex) {
+							Logger.getLogger(Drone.class.getName()).log(
+									Level.SEVERE, null, ex);
+						}
+					}
+				}
+			} else {
+				isActive = false;
+			}
+		}
+	}
 
-            Vertex[] from = vertices.toArray(new Vertex[vertices.size()]);
-            Vertex[] to = new Vertex[newSize];
+	/**
+	 * This method handles the Drone's virtual movement based on route and
+	 * scheduling data
+	 */
+	private void updateMotion(double aLat, double aLon, Vertex b) {
+		double dist = b.getDistanceInMeters(aLat, aLon);
 
-            int stopIndex = 0;
-            int nextInsertIndex = toInsert.get(stopIndex).getIndex();
+		double timeAtSpeed = dist / mSpeed;
+		if (timeAtSpeed < 1.0) {
+			timeAtSpeed = 1.0;
+		}
 
-            while (newIndex < newSize) {
-                if (newIndex == nextInsertIndex) {
-                    newIndex++;
-                    to[nextInsertIndex] = toInsert.get(stopIndex).getVertex();
-                    stopIndex++;
-                    if (stopIndex < stops.size()) {
-                        nextInsertIndex = toInsert.get(stopIndex).getIndex() + stopIndex;
-                    } else {
-                        nextInsertIndex = -1;
-                    }
-                } else {
-                    int length;
-                    if (nextInsertIndex != -1) {
-                        length = nextInsertIndex - newIndex;
-                    } else {
-                        length = newSize - newIndex;
-                    }
-                    if (length > 0) {
-                        System.arraycopy(from, origIndex, to, newIndex, length);
-                        origIndex += length;
-                        newIndex += length;
-                    }
-                }
-            }
-            vertices.clear();
-            vertices.addAll(Arrays.asList(to));
-        }
-    }
+		mDY = (b.get_shape_pt_lat() - aLat) / timeAtSpeed * mPushWait;
+		mDX = (b.get_shape_pt_lon() - aLon) / timeAtSpeed * mPushWait;
+
+		segDistance = dist;
+		segTraveledDistance = 0.0;
+		distPerTick = mSpeed * mPushWait;
+	}
 
 }

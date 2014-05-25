@@ -105,7 +105,7 @@ public final class Trip extends GTFSParser implements Comparable<Trip> {
 	/**
 	 * Stub constructor
 	 * 
-	 * @param inLine
+	 * @param inLine A String
 	 */
 	public Trip(String inLine) {
 	}

@@ -704,7 +704,7 @@ public final class GTFS {
 	/**
 	 * Get current day of the week
 	 * 
-	 * @return
+	 * @return A String representation of the day of the week
 	 */
 	public String getDayOfWeek() {
 		return _inDay.toString();
@@ -713,7 +713,7 @@ public final class GTFS {
 	/**
 	 * Get the path to the GTFS directory
 	 * 
-	 * @return
+	 * @return The GTFS directory
 	 */
 	public String getDir() {
 		return _Dir;
@@ -722,7 +722,7 @@ public final class GTFS {
 	/**
 	 * Get this GTFS object's ID
 	 * 
-	 * @return
+	 * @return The GTFS ID
 	 */
 	public int getID() {
 		return _id;

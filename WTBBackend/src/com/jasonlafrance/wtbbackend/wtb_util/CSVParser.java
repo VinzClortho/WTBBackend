@@ -15,32 +15,40 @@ This file is part of WTBBackend.
 
     You should have received a copy of the GNU General Public License
     along with WTBBackend.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package com.jasonlafrance.wtbbackend.wtb_util;
 
 import java.util.ArrayList;
 
 /**
- *
+ * Comma seperated value parsing function class
+ * 
  * @author Jason LaFrance
  */
 public class CSVParser {
 
-    public static String[] parseLine(String in) {
-        ArrayList<String> list = new ArrayList<>();
+	/**
+	 * Parse a line of CSV data into a String array
+	 * 
+	 * @param in
+	 *            The raw CSV String to parse
+	 * @return A String array of the seperated data
+	 */
+	public static String[] parseLine(String in) {
+		ArrayList<String> list = new ArrayList<>();
 
-        boolean notInsideComma = true;
-        int start = 0, end = 0;
-        for (int i = 0; i < in.length(); i++) {
-            if (in.charAt(i) == ',' && notInsideComma) {
-                list.add(in.substring(start, i));
-                start = i + 1;
-            } else if (in.charAt(i) == '"') {
-                notInsideComma = !notInsideComma;
-            }
-        }
-        list.add(in.substring(start));
-        return list.toArray(new String[list.size()]);
-    }
+		boolean notInsideComma = true;
+		int start = 0, end = 0;
+		for (int i = 0; i < in.length(); i++) {
+			if (in.charAt(i) == ',' && notInsideComma) {
+				list.add(in.substring(start, i));
+				start = i + 1;
+			} else if (in.charAt(i) == '"') {
+				notInsideComma = !notInsideComma;
+			}
+		}
+		list.add(in.substring(start));
+		return list.toArray(new String[list.size()]);
+	}
 }
