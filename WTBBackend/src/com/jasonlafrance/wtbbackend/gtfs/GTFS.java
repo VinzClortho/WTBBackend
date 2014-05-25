@@ -47,6 +47,7 @@ import com.jasonlafrance.wtbbackend.config.Config;
 import com.jasonlafrance.wtbbackend.vehicle.Vehicle;
 
 /**
+ * The main GTFS data table and structure class
  * 
  * @author Jason LaFrance
  */
