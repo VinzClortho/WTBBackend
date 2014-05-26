@@ -39,6 +39,10 @@ import org.xml.sax.SAXException;
 public class Config {
 
 	// constants
+	public static final int MAJOR_VERSION = 0;
+	public static final int MINOR_VERSION = 2;
+	public static final int REVISION = 0;
+
 	public static String GTFS_DIRS = "gtfs_dirs";
 	public static String GTFS_TIME_GAP = "gtfs_time_gap";
 	public static String DRONES_ACTIVE = "drones_active";
