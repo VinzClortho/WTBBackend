@@ -66,17 +66,12 @@ public final class GTFS {
 			.getInstance();
 
 	private final static String _gtfsClasses[] = new String[] {
-			"com.jasonlafrance.wtbbackend.gtfs.Agency",
-			"com.jasonlafrance.wtbbackend.gtfs.Calendar",
-			"com.jasonlafrance.wtbbackend.gtfs.CalendarDate",
-			"com.jasonlafrance.wtbbackend.gtfs.FareAttribute",
-			"com.jasonlafrance.wtbbackend.gtfs.FareRule",
-			"com.jasonlafrance.wtbbackend.gtfs.Route",
-			"com.jasonlafrance.wtbbackend.gtfs.Stop",
-			"com.jasonlafrance.wtbbackend.gtfs.StopTime",
-			"com.jasonlafrance.wtbbackend.gtfs.Transfer",
-			"com.jasonlafrance.wtbbackend.gtfs.Trip",
-			"com.jasonlafrance.wtbbackend.gtfs.Vertex" };
+			Agency.class.getName(), Calendar.class.getName(),
+			CalendarDate.class.getName(), FareAttribute.class.getName(),
+			FareRule.class.getName(), Route.class.getName(),
+			Stop.class.getName(), StopTime.class.getName(),
+			Transfer.class.getName(), Trip.class.getName(),
+			Vertex.class.getName() };
 
 	/**
 	 * Find the closest stop within the current time frame to a vehicle
@@ -252,33 +247,21 @@ public final class GTFS {
 		_maxTimeGap = inTimeGap;
 		_paths = new ArrayList<>();
 
-		_classListMap
-				.put("com.jasonlafrance.wtbbackend.gtfs.Agency", mAgencies);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Calendar",
-				mCalendar);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.CalendarDate",
-				mCalendarDates);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.FareAttribute",
-				mFareAttributes);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.FareRule",
-				mFareRules);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Route", mRoutes);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Stop", mStops);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.StopTime",
-				mStopTimes);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Transfer",
-				mTransfers);
-		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Trip", mTrips);
-		_classListMap
-				.put("com.jasonlafrance.wtbbackend.gtfs.Vertex", mVertices);
+		_classListMap.put(Agency.class.getName(), mAgencies);
+		_classListMap.put(Calendar.class.getName(), mCalendar);
+		_classListMap.put(CalendarDate.class.getName(), mCalendarDates);
+		_classListMap.put(FareAttribute.class.getName(), mFareAttributes);
+		_classListMap.put(FareRule.class.getName(), mFareRules);
+		_classListMap.put(Route.class.getName(), mRoutes);
+		_classListMap.put(Stop.class.getName(), mStops);
+		_classListMap.put(StopTime.class.getName(), mStopTimes);
+		_classListMap.put(Transfer.class.getName(), mTransfers);
+		_classListMap.put(Trip.class.getName(), mTrips);
+		_classListMap.put(Vertex.class.getName(), mVertices);
 
 		// generate and initialize all of the aggregate objects
 		// with abstract building via reflection API
 		for (String table : _gtfsClasses) {
-			/*
-			 * if("GTFS.Trip".equals(table)){ mTrips = new Trip[1]; mTrips[0] =
-			 * new Trip(); continue; }
-			 */
 
 			String filename = GTFSParser.getFilename(table);
 			FileInputStream fin = null;
@@ -383,7 +366,6 @@ public final class GTFS {
 			_tripMap.put(e.get_trip_id(), e);
 		}
 		for (int i = 0; i < mRoutes.size(); i++) {
-			// for (Route e : mRoutes) {
 			Route e = mRoutes.get(i);
 
 			Agency agency = null;
@@ -447,6 +429,7 @@ public final class GTFS {
 				_tripMap.get(st.get_trip_id()).addStopTime(
 						st.getArrivalTimecode());
 			}
+
 			// insert all stops also as vertices into their trip's vertex list
 			/*
 			 * if (Config.get().getBooleanOption(Config.DRONES_ACTIVE)) { for
