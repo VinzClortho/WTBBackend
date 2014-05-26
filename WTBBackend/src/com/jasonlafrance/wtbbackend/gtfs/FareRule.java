@@ -56,47 +56,6 @@ public class FareRule extends GTFSParser {
 	}
 
 	/**
-	 * Create an FareRule object with a supplied line from a GTFS fare_rules.txt
-	 * table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS fare_rules.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public FareRule(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "contains_id":
-				set_contains_id(f[i]);
-				break;
-			case "destination_id":
-				set_destination_id(f[i]);
-				break;
-			case "fare_id":
-				set_fare_id(f[i]);
-				break;
-			case "origin_id":
-				set_origin_id(f[i]);
-				break;
-			case "route_id":
-				set_route_id(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Create a FareRule object with the given values.
 	 * 
 	 * @param inID

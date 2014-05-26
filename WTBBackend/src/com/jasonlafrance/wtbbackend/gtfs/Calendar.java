@@ -65,57 +65,6 @@ public final class Calendar extends GTFSParser {
 	}
 
 	/**
-     * Create a Calendar object with a supplied line from a GTFS calendar.txt table.
-     * @param inLine Line from a GTFS calendar.txt table.
-     * @param id The GTFS ID from the GTFS multition that this object belongs to.
-     */
-	public Calendar(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "end_date":
-				set_end_date(f[i]);
-				break;
-			case "monday":
-				set_monday(f[i]);
-				break;
-			case "tuesday":
-				set_tuesday(f[i]);
-				break;
-			case "wednesday":
-				set_wednesday(f[i]);
-				break;
-			case "thursday":
-				set_thursday(f[i]);
-				break;
-			case "friday":
-				set_friday(f[i]);
-				break;
-			case "saturday":
-				set_saturday(f[i]);
-				break;
-			case "sunday":
-				set_sunday(f[i]);
-				break;
-			case "service_id":
-				set_service_id(f[i]);
-				break;
-			case "start_date":
-				set_start_date(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Create a Calendar object with the given values.
 	 * 
 	 * @param inID

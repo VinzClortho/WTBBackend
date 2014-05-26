@@ -125,58 +125,6 @@ public final class Route extends GTFSParser {
 	}
 
 	/**
-	 * Create a Route object with a supplied line from a GTFS routes.txt table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS routes.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public Route(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "agency_id":
-				set_agency_id(f[i]);
-				break;
-			case "route_color":
-				set_route_color(f[i]);
-				break;
-			case "route_desc":
-				set_route_desc(f[i]);
-				break;
-			case "route_id":
-				set_route_id(f[i]);
-				break;
-			case "route_long_name":
-				set_route_long_name(f[i]);
-				break;
-			case "route_short_name":
-				set_route_short_name(f[i]);
-				break;
-			case "route_text_color":
-				set_route_text_color(f[i]);
-				break;
-			case "route_type":
-				set_route_type(f[i]);
-				break;
-			case "route_url":
-				set_route_url(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Create a Route object from the given values.
 	 * 
 	 * @param inID

@@ -53,43 +53,6 @@ public final class Transfer extends GTFSParser {
 	public Transfer(String inLine) {
 	}
 
-	/**
-	 * Create a Transfer object with a supplied line from a GTFS transfers.txt
-	 * table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS transfers.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public Transfer(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "from_stop_id":
-				set_from_stop_id(f[i]);
-				break;
-			case "min_transfer_time":
-				set_min_transfer_time(f[i]);
-				break;
-			case "to_stop_id":
-				set_to_stop_id(f[i]);
-				break;
-			case "transfer_type":
-				set_transfer_type(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
 
 	/**
 	 * Create a Transfer object from given values

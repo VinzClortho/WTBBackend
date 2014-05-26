@@ -180,7 +180,7 @@ public abstract class GTFSParser {
 	public abstract int getID();
 
 	/**
-	 * Parse a table row for the given GTFS ID
+	 * Parse a table row for the given GTFS ID using the Reflection API
 	 * 
 	 * @param inID
 	 *            The GTFS ID

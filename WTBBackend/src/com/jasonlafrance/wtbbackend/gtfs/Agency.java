@@ -50,57 +50,6 @@ public final class Agency extends GTFSParser {
 	public Agency(String inLine) {
 	}
 
-	// do this without reflection!
-	/**
-	 * Create an Agency object with a supplied line from a GTFS agency.txt
-	 * table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS agency.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public Agency(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "agency_fare_url":
-				set_agency_fare_url(f[i]);
-				break;
-			case "agency_id":
-				set_agency_id(f[i]);
-				break;
-			case "agency_lang":
-				set_agency_lang(f[i]);
-				break;
-			case "agency_name":
-				set_agency_name(f[i]);
-				break;
-			case "agency_phone":
-				set_agency_phone(f[i]);
-				break;
-			case "agency_timezone":
-				set_agency_timezone(f[i]);
-				break;
-			case "agency_url":
-				set_agency_url(f[i]);
-				break;
-			case "bikes_policy_url":
-				set_bikes_policy_url(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
 	/**
 	 * Create an Agency object with given values.
 	 * 
@@ -206,6 +155,7 @@ public final class Agency extends GTFSParser {
 	 */
 	@Override
 	public String getFilename() {
+		System.out.println("Agency: " + _filename);
 		return _filename;
 	}
 

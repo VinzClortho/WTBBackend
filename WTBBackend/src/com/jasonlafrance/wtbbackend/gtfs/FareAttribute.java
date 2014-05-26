@@ -83,50 +83,6 @@ public final class FareAttribute extends GTFSParser {
 	}
 
 	/**
-	 * Create an FareAttribute object with a supplied line from a GTFS
-	 * fare_attributes.txt table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS fare_attributes.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public FareAttribute(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "currency_type":
-				set_currency_type(f[i]);
-				break;
-			case "fare_id":
-				set_fare_id(f[i]);
-				break;
-			case "payment_method":
-				set_payment_method(f[i]);
-				break;
-			case "price":
-				set_price(f[i]);
-				break;
-			case "transfer_duration":
-				set_transfer_duration(f[i]);
-				break;
-			case "transfers":
-				set_transfers(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Get the currency type
 	 * 
 	 * @return currency type

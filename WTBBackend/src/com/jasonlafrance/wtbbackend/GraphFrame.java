@@ -107,9 +107,11 @@ public class GraphFrame extends javax.swing.JFrame implements ComponentListener 
 	}
 
 	public synchronized void addPaths(ArrayList<RoutePath> inPaths) {
+		System.out.println("GraphFrame: adding paths...");
 		if (mPaths.addAll(inPaths)) {
+
 			buildEdges();
-			updatePathImage2();
+			updatePathImage();
 		}
 	}
 
@@ -207,7 +209,7 @@ public class GraphFrame extends javax.swing.JFrame implements ComponentListener 
 	public void componentResized(ComponentEvent e) {
 		// gPanel.setSize(this.getSize());
 		adjustViewport();
-		updatePathImage2();
+		updatePathImage();
 	}
 
 	@Override
@@ -218,6 +220,7 @@ public class GraphFrame extends javax.swing.JFrame implements ComponentListener 
 	private void getStopInfoSelected() {
 		mStopInfoSelected = mShowStopInfo.isSelected();
 	}
+
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always
@@ -311,35 +314,43 @@ public class GraphFrame extends javax.swing.JFrame implements ComponentListener 
 
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
+
 	public int mapXToView(double inX) {
 		return (int) ((inX - mXMin) * mScale);
 	}
+
 	public int mapYToView(double inY) {
 		return gPanel.getHeight() - (int) ((inY - mYMin) * mScale);
 	}
+
 	private void mMoveEastActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_mMoveEastActionPerformed
 		mXMin += mMoveIncrement;
 		mXMax += mMoveIncrement;
 		adjustMovement();
 	}// GEN-LAST:event_mMoveEastActionPerformed
+
 	private void mMoveNorthActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_mMoveNorthActionPerformed
 		mYMin += mMoveIncrement;
 		mYMax += mMoveIncrement;
 		adjustMovement();
 	}// GEN-LAST:event_mMoveNorthActionPerformed
+
 	private void mMoveSouthActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_mMoveSouthActionPerformed
 		mYMin -= mMoveIncrement;
 		mYMax -= mMoveIncrement;
 		adjustMovement();
 	}// GEN-LAST:event_mMoveSouthActionPerformed
+
 	private void mMoveWestActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_mMoveWestActionPerformed
 		mXMin -= mMoveIncrement;
 		mXMax -= mMoveIncrement;
 		adjustMovement();
 	}// GEN-LAST:event_mMoveWestActionPerformed
+
 	private void mShowStopInfoActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_mShowStopInfoActionPerformed
 		getStopInfoSelected();
 	}// GEN-LAST:event_mShowStopInfoActionPerformed
+
 	private void mZoomInActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_mZoomInActionPerformed
 		mScale *= 1.1;
 		adjustMovement();
@@ -354,10 +365,10 @@ public class GraphFrame extends javax.swing.JFrame implements ComponentListener 
 	public synchronized void setPaths(ArrayList<RoutePath> inPaths) {
 		mPaths = inPaths;
 		buildEdges();
-		updatePathImage2();
+		updatePathImage();
 	}
 
-	private synchronized void updatePathImage() {
+	private synchronized void updatePathImage_Old() {
 		if (gPanel.getWidth() == 0 || gPanel.getHeight() == 0) {
 			return;
 		}
@@ -390,6 +401,7 @@ public class GraphFrame extends javax.swing.JFrame implements ComponentListener 
 				ListIterator vi = t.getVertices().listIterator();
 				while (vi.hasNext()) {
 					Vertex v = (Vertex) vi.next();
+					System.out.println("GraphFrame: " + v);
 					int x = mapXToView(v.get_shape_pt_lon());
 					int y = mapYToView(v.get_shape_pt_lat());
 					if (lastX != -1) {
@@ -405,7 +417,7 @@ public class GraphFrame extends javax.swing.JFrame implements ComponentListener 
 		this.repaint();
 	}
 
-	private synchronized void updatePathImage2() {
+	private synchronized void updatePathImage() {
 		if (gPanel.getWidth() == 0 || gPanel.getHeight() == 0) {
 			return;
 		}

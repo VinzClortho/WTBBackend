@@ -65,67 +65,6 @@ public final class StopTime extends GTFSParser implements Comparable<StopTime> {
 	public StopTime(String inLine) {
 	}
 
-	// do this without reflection!
-	/**
-	 * Create a StopTime object with a supplied line from a GTFS stop_times.txt
-	 * table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS stop_times.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-
-	public StopTime(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "arrival_time":
-				set_arrival_time(f[i]);
-				break;
-			case "continuous_stops":
-				set_continuous_stops(f[i]);
-				break;
-			case "departure_time":
-				set_departure_time(f[i]);
-				break;
-			case "drop_off_type":
-				set_drop_off_type(f[i]);
-				break;
-			case "pickup_type":
-				set_pickup_type(f[i]);
-				break;
-			case "shape_dist_traveled":
-				set_shape_dist_traveled(f[i]);
-				break;
-			case "stop_headsign":
-				set_stop_headsign(f[i]);
-				break;
-			case "stop_id":
-				set_stop_id(f[i]);
-				break;
-			case "stop_sequence":
-				set_stop_sequence(f[i]);
-				break;
-			case "timepoint":
-				set_timepoint(f[i]);
-				break;
-			case "trip_id":
-				set_trip_id(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
 	/**
 	 * Create a StopTime object from given values
 	 * 

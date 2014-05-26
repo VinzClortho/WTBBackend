@@ -65,10 +65,18 @@ public final class GTFS {
 	private static final StackedStopList sMasterSSL = StackedStopList
 			.getInstance();
 
-	private final static String _gtfsClasses[] = new String[] { "GTFS.Agency",
-			"GTFS.Calendar", "GTFS.CalendarDate", "GTFS.FareAttribute",
-			"GTFS.FareRule", "GTFS.Route", "GTFS.Stop", "GTFS.StopTime",
-			"GTFS.Transfer", "GTFS.Trip", "GTFS.Vertex" };
+	private final static String _gtfsClasses[] = new String[] {
+			"com.jasonlafrance.wtbbackend.gtfs.Agency",
+			"com.jasonlafrance.wtbbackend.gtfs.Calendar",
+			"com.jasonlafrance.wtbbackend.gtfs.CalendarDate",
+			"com.jasonlafrance.wtbbackend.gtfs.FareAttribute",
+			"com.jasonlafrance.wtbbackend.gtfs.FareRule",
+			"com.jasonlafrance.wtbbackend.gtfs.Route",
+			"com.jasonlafrance.wtbbackend.gtfs.Stop",
+			"com.jasonlafrance.wtbbackend.gtfs.StopTime",
+			"com.jasonlafrance.wtbbackend.gtfs.Transfer",
+			"com.jasonlafrance.wtbbackend.gtfs.Trip",
+			"com.jasonlafrance.wtbbackend.gtfs.Vertex" };
 
 	/**
 	 * Find the closest stop within the current time frame to a vehicle
@@ -244,17 +252,25 @@ public final class GTFS {
 		_maxTimeGap = inTimeGap;
 		_paths = new ArrayList<>();
 
-		_classListMap.put("GTFS.Agency", mAgencies);
-		_classListMap.put("GTFS.Calendar", mCalendar);
-		_classListMap.put("GTFS.CalendarDate", mCalendarDates);
-		_classListMap.put("GTFS.FareAttribute", mFareAttributes);
-		_classListMap.put("GTFS.FareRule", mFareRules);
-		_classListMap.put("GTFS.Route", mRoutes);
-		_classListMap.put("GTFS.Stop", mStops);
-		_classListMap.put("GTFS.StopTime", mStopTimes);
-		_classListMap.put("GTFS.Transfer", mTransfers);
-		_classListMap.put("GTFS.Trip", mTrips);
-		_classListMap.put("GTFS.Vertex", mVertices);
+		_classListMap
+				.put("com.jasonlafrance.wtbbackend.gtfs.Agency", mAgencies);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Calendar",
+				mCalendar);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.CalendarDate",
+				mCalendarDates);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.FareAttribute",
+				mFareAttributes);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.FareRule",
+				mFareRules);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Route", mRoutes);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Stop", mStops);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.StopTime",
+				mStopTimes);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Transfer",
+				mTransfers);
+		_classListMap.put("com.jasonlafrance.wtbbackend.gtfs.Trip", mTrips);
+		_classListMap
+				.put("com.jasonlafrance.wtbbackend.gtfs.Vertex", mVertices);
 
 		// generate and initialize all of the aggregate objects
 		// with abstract building via reflection API
@@ -275,12 +291,9 @@ public final class GTFS {
 				isr = new InputStreamReader(fin, "UTF-8");
 				br = new BufferedReader(isr);
 
-				// Constructor<?> cons = GTFSParser.getConstructor(table,
-				// false);
 				Constructor<?> cons = GTFSParser.getConstructor(table, true);
 				String line = br.readLine();
 
-				// ArrayList<GTFSParser> workList = new ArrayList<>();
 				if (line != null) {
 					// grab header line
 					GTFSParser.setHeader(_id, filename, line.trim());
@@ -288,8 +301,6 @@ public final class GTFS {
 					line = br.readLine();
 					while (line != null && line.trim().length() > 0) {
 						// instantiate a new object of the iterated class type
-						// GTFSParser e = (GTFSParser)
-						// cons.newInstance(line.trim(), _id);
 						GTFSParser e = (GTFSParser) cons.newInstance("");
 						e.parse(_id, line);
 
@@ -635,10 +646,10 @@ public final class GTFS {
 	 * Calculate latitude and longitude extreme values
 	 */
 	private void calcExtremes() {
-		_minLat = -Double.MAX_VALUE;
-		_minLon = -Double.MAX_VALUE;
-		_maxLat = Double.MAX_VALUE;
-		_maxLon = Double.MAX_VALUE;
+		_minLat = Double.MAX_VALUE;
+		_minLon = Double.MAX_VALUE;
+		_maxLat = -Double.MAX_VALUE;
+		_maxLon = -Double.MAX_VALUE;
 
 		for (int i = 0; i < mVertices.size(); i++) {
 			Vertex e = mVertices.get(i);

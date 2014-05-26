@@ -108,45 +108,6 @@ public final class Vertex extends GTFSParser {
 
 	}
 
-	/**
-	 * Create a Vertex object with a supplied line from a GTFS shapes.txt table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS shapes.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public Vertex(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "shape_dist_traveled":
-				set_shape_dist_traveled(f[i]);
-				break;
-			case "shape_id":
-				set_shape_id(f[i]);
-				break;
-			case "shape_pt_lat":
-				set_shape_pt_lat(f[i]);
-				break;
-			case "shape_pt_lon":
-				set_shape_pt_lon(f[i]);
-				break;
-			case "shape_pt_sequence":
-				set_shape_pt_sequence(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
 	public boolean equals(Vertex in) {
 		if (in == null) {
 			return false;

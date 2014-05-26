@@ -110,61 +110,6 @@ public final class Trip extends GTFSParser implements Comparable<Trip> {
 	public Trip(String inLine) {
 	}
 
-	/**
-	 * Create a Trip object with a supplied line from a GTFS trips.txt table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS trips.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public Trip(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "block_id":
-				set_block_id(f[i]);
-				break;
-			case "direction_id":
-				set_direction_id(f[i]);
-				break;
-			case "route_id":
-				set_route_id(f[i]);
-				break;
-			case "service_id":
-				set_service_id(f[i]);
-				break;
-			case "shape_id":
-				set_shape_id(f[i]);
-				break;
-			case "trip_headsign":
-				set_trip_headsign(f[i]);
-				break;
-			case "trip_id":
-				set_trip_id(f[i]);
-				break;
-			case "trip_short_name":
-				set_trip_short_name(f[i]);
-				break;
-			case "trip_type":
-				set_trip_type(f[i]);
-				break;
-			case "wheelchair_accessible":
-				set_wheelchair_accessible(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-		resetStructure();
-	}
 
 	/**
 	 * Create a Trip object from given values

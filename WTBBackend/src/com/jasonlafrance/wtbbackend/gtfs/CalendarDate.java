@@ -54,41 +54,6 @@ public final class CalendarDate extends GTFSParser {
 	}
 
 	/**
-	 * Create a CalendarDate object with a supplied line from a GTFS
-	 * calendar_dates.txt table.
-	 * 
-	 * @param inLine
-	 *            Line from a GTFS calendar_dates.txt table.
-	 * @param id
-	 *            The GTFS ID from the GTFS multition that this object belongs
-	 *            to.
-	 */
-	public CalendarDate(String inLine, int id) {
-		ArrayList<String> h = _headers.get(id).get(_filename);
-		String[] f = CSVParser.parseLine(inLine);
-
-		if (f.length != h.size()) {
-			return;
-		}
-
-		for (int i = 0; i < f.length; i++) {
-			switch (h.get(i)) {
-			case "date":
-				set_date(f[i]);
-				break;
-			case "exception_type":
-				set_exception_type(f[i]);
-				break;
-			case "service_id":
-				set_service_id(f[i]);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Create a CalendarDate object from the given values.
 	 * 
 	 * @param inID
